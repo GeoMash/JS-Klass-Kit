@@ -23,6 +23,7 @@ $JSKK.Class.create
 				this.$reflect('extends'),
 				this.$reflect('implements'),
 				this.$reflect('uses'),
+				this.$reflect('self'),
 			].join('<br />');
 		}
 	}
