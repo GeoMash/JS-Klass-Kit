@@ -300,6 +300,7 @@ $JSKK.Class=
 					case 'uses':		return definition.$uses;
 					case 'abstract':	return definition.$abstract	|| false;
 					case 'final':		return definition.$final	|| false;
+					case 'self':		return namespace[className];
 				}
 			}
 			

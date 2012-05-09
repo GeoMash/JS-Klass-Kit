@@ -82,3 +82,18 @@ var $JSKK=
 		return results;
 	}
 }
+if (Object.isUndefined(window.console))
+{
+	window.console=
+	{
+		log:	$JSKK.emptyFunction,
+		debug:	$JSKK.emptyFunction
+	}
+}
+else
+{
+	if (Object.isUndefined(window.console.debug))
+	{
+		window.console.debug=window.console.log;
+	}
+}

@@ -1,14 +1,3 @@
-/*
- * Petim Web Tools v1.2
- * Copyright(c) 2008, Petim Pty. Ltd.
- * licensing@petim.com.au
- * 
- * See packaged license.txt
- * OR URL:
- * http://www.petim.com.au/products/pwt/license/view/
- * for full license terms.
- */
-
 Object.extend
 (
 	Function.prototype,
@@ -24,56 +13,56 @@ Object.extend
 		{
 			if (arguments.length<2 && typeof arguments[0]=='undefined')return this;
 			var	method	=this,
-				args	=$A(arguments),
+				args	=$JSKK.toArray(arguments),
 				object	=args.shift();
 			return function()
 			{
-				return method.apply(object,args.concat($A(arguments)));
+				return method.apply(object,args.concat($JSKK.toArray(arguments)));
 			}
 		},
 		curry: function()
 		{
 			if (!arguments.length)return this;
 			var	__method=this,
-			args=$A(arguments);
+			args=$JSKK.toArray(arguments);
 			return function()
 			{
-				return __method.apply(this, args.concat($A(arguments)));
+				return __method.apply(this, args.concat($JSKK.toArray(arguments)));
 			}
 		},
 		intercept: function()
 		{
 			if (arguments.length<1 && typeof arguments[0]!='function')return;
 			var method		=this,
-				args		=$A(arguments),
+				args		=$JSKK.toArray(arguments),
 				interceptor	=args.shift();
 			return function()
 			{
-				interceptor.apply(this,args.concat($A(arguments)));
-				return method.apply(this,args.concat($A(arguments)));
+				interceptor.apply(this,args.concat($JSKK.toArray(arguments)));
+				return method.apply(this,args.concat($JSKK.toArray(arguments)));
 			}
 		},
 		join: function()
 		{
 			if (arguments.length<1 && typeof arguments[0]!='function')return;
 			var method		=this,
-				args		=$A(arguments),
+				args		=$JSKK.toArray(arguments),
 				joined		=args.shift();
 			return function()
 			{
-				method.apply(this,args.concat($A(arguments)));
-				return joined.apply(this,args.concat($A(arguments)));
+				method.apply(this,args.concat($JSKK.toArray(arguments)));
+				return joined.apply(this,args.concat($JSKK.toArray(arguments)));
 			}
 		},
 		sequencedJoin: function()
 		{
 			if (arguments.length<1 && typeof arguments[0]!='function')return;
 			var method		=this,
-				args		=$A(arguments),
+				args		=$JSKK.toArray(arguments),
 				joined		=args.shift();
 			return function()
 			{
-				var ret=method.apply(this,args.concat($A(arguments)));
+				var ret=method.apply(this,args.concat($JSKK.toArray(arguments)));
 				if (Object.isNull(ret))return null;
 				if (Object.isAssocArray(ret) && Object.isDefined(ret.args))
 				{
@@ -85,7 +74,7 @@ Object.extend
 		defer: function()
 		{
 			var method	=this,
-				xargs	=$A(arguments),
+				xargs	=$JSKK.toArray(arguments),
 				time	=xargs.shift(),
 				scope	=xargs.shift(),
 				args	=xargs.shift();

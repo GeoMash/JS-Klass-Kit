@@ -366,3 +366,62 @@ Object.ifSetOr=function(object,or)
 {
 	return Object.isDefined(object)?object:or || null;
 }
+Object.isEqual=function(object1,object2)
+{
+	var i;
+	if (typeof(object1)!=typeof(object2))
+	{
+		return false;
+	}
+	for (i in object1)
+	{
+		if (typeof(object2[i])=='undefined')
+		{
+			return false;
+		}
+	}
+	for(i in object1)
+	{
+		if (object1[i])
+		{
+			switch(typeof(object1[i]))
+			{
+				case 'object':
+				{
+					if (!Object.isEqual(object1[i],object2[i]))
+					{
+						return false;
+					}
+					break;
+				}
+				case 'function':
+				{
+					if (typeof(object2[i])=='undefined' || object1[i].toString()!=object2[i].toString())
+					{
+						return false;
+					}
+					break;
+				}
+				default:
+				{
+					if (object1[i]!=object2[i])
+					{
+						return false;
+					}
+				}
+			}
+		}
+		else
+		{
+			if (object2[i])return false;
+		}
+	}
+	for(i in object2)
+	{
+		if (typeof(object1[i])=='undefined')
+		{
+			return false;
+		}
+	}
+	return true;
+}

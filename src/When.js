@@ -6,6 +6,7 @@ $JSKK.Class.create
 	}
 )
 (
+	{},
 	{
 		timer:	null,
 		items:
@@ -52,7 +53,7 @@ $JSKK.Class.create
 		},
 		captureCondition: function(condition,id,args)
 		{
-			var	args		=$A(args)
+			var	args		=$JSKK.toArray(args)
 			if (args.length)
 			{
 				this.items[id].condition	=condition;
@@ -61,12 +62,12 @@ $JSKK.Class.create
 			}
 			else
 			{
-				delete this.removeItem(id);
+				this.removeItem(id);
 			}
 		},
 		addItem: function(scope,object)
 		{
-			var id=$JSKK.util.random();
+			var id=Math.round(Math.random()*1000000);
 			this.items[id]=
 			{
 				id:			id,
@@ -110,11 +111,25 @@ $JSKK.Class.create
 		},
 		isTrue: function(item)
 		{
-			this.assert((item.scope[item.object]===true),item);
+			if (!Object.isFunction(item.scope))
+			{
+				this.assert((item.scope[item.object]===true),item);
+			}
+			else
+			{
+				this.assert((item.scope()===true),item);
+			}
 		},
 		isFalse: function(item)
 		{
-			this.assert((item.scope[item.object]===false),item);
+			if (!Object.isFunction(item.scope))
+			{
+				this.assert((item.scope[item.object]===false),item);
+			}
+			else
+			{
+				this.assert((item.scope()===false),item);
+			}
 		},
 		isBoolean: function(item)
 		{
@@ -150,11 +165,11 @@ $JSKK.Class.create
 		},
 		isEqualTo: function(item)
 		{
-			this.assert((item.scope[item.object.object]==item.object.value),item)
+			this.assert((item.scope[item.object.object]==item.object.value),item);
 		},
 		isNotEqualTo: function(item)
 		{
-			this.assert((item.scope[item.object.object]!=item.object.value),item)
+			this.assert((item.scope[item.object.object]!=item.object.value),item);
 		}
 	}
 );
@@ -238,6 +253,18 @@ $JSKK.when=function(scope,object)
 			$JSKK.When.captureCondition('isNull',id,arguments);
 			return chain;
 		},
+		/**
+		 * 
+		 * 
+$JSKK.when(stores,{object:'count',value:2}).isEqualTo
+(
+	function()
+	{
+		...
+	}.bind(this)
+);
+		 * 
+		 */
 		isEqualTo: function()
 		{
 			$JSKK.When.captureCondition('isEqualTo',id,arguments);

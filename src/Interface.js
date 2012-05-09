@@ -110,7 +110,7 @@ $JSKK.Interface=
 		{
 			throw new Error('Unable to implement interface. Interface to implement is undefined.');
 		}
-		else if (!Object.isUndefined(thisInterface.prototype.className))
+		else if (thisInterface.$type=='class')
 		{
 			throw new Error
 			(
@@ -120,7 +120,7 @@ $JSKK.Interface=
 				]
 			);
 		}
-		else if (!Object.isUndefined(thisInterface.prototype.traitName))
+		else if (thisInterface.$type=='trait')
 		{
 			throw new Error
 			(
@@ -130,7 +130,7 @@ $JSKK.Interface=
 				]
 			);
 		}
-		else if (Object.isUndefined(thisInterface.prototype.interfaceName))
+		else if (thisInterface.$type=='interface')
 		{
 			throw new Error('Unable to implement interface. Interface to implement is not an instance of "$JSKK.Interface".');
 		}
