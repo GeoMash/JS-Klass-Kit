@@ -1,3 +1,5 @@
+require('./extension/Object');
+$JSKK=require('./Core').$JSKK;
 /**
  * 
  * 
@@ -21,16 +23,27 @@ $JSKK.Class=
 	{
 		if (typeof definition=='string')
 		{
-			var	namespace	=window,
+			var	namespace	=global,
 				className	=definition,
 				def			={};
 			
 			def.$name		=definition;
-			def.$namespace	='window';
+			def.$namespace	='global';
 			definition		=def;
 		}
 		else
 		{
+			if (Object.isDefined(definition.$requires))
+			{
+				if (!Object.isArray(definition.$requires))
+				{
+					definition.$requires=[definition.$requires];
+				}
+				for (var i=0,j=definition.$requires.length; i<j; i++)
+				{
+					require(definition.$requires[i]);
+				}
+			}
 			if (Object.isUndefined(definition.$name))
 			{
 				throw Error('Class name must be defined.');
@@ -40,8 +53,8 @@ $JSKK.Class=
 				var className=definition.$name;
 				if (Object.isUndefined(definition.$namespace))
 				{
-					definition.$namespace='window';
-					var namespace=window;
+					definition.$namespace='global';
+					var namespace=global;
 				}
 				else
 				{
@@ -50,6 +63,25 @@ $JSKK.Class=
 			}
 		}
 		definition.$type='class';
+		
+		if (Object.isDefined(definition.$extends))
+		{
+			var	obj		=global,
+				parts	=definition.$extends.split('.');
+			
+			for (var i=0,j=parts.length; i<j; i++)
+			{
+				if (Object.isDefined(obj[parts[i]]))
+				{
+					obj=obj[parts[i]];
+				}
+				else
+				{
+					throw new Error('Invalid extension. Class "'+definition.$extends+'" has not been loaded.');
+				}
+			}
+			definition.$extends=obj;
+		}
 		
 		//When a new instance of the class is created, this is where it all begins.
 		namespace[className]=function()
@@ -87,7 +119,8 @@ $JSKK.Class=
 					{
 						return function()
 						{
-							var ret=null;
+							var ret		=null;
+							
 							if (!Object.isUndefined(extension.definition.$extends))
 							{
 								var ext			=extension.definition.$extends,
@@ -170,9 +203,10 @@ $JSKK.Class=
 						return func.apply(scope,arguments);
 					}
 				}
-				if (!Object.isUndefined(definition.$extends))
+				
+				if (Object.isDefined(definition.$extends))
 				{
-					for (object in definition.$extends.prototype)
+					for (var object in definition.$extends.prototype)
 					{
 						//Immidiate Parents.
 						if (Object.isFunction(scope[object])
@@ -193,7 +227,7 @@ $JSKK.Class=
 									doExtend(scope,object,extension);
 									break;
 								}
-								else if (!Object.isUndefined(extension.definition.$extends))
+								else if (Object.isDefined(extension.definition.$extends))
 								{
 									extension=extension.definition.$extends;
 								}
@@ -206,7 +240,7 @@ $JSKK.Class=
 					}
 				}
 			}
-			if (!Object.isUndefined(namespace[className].definition.$extends))
+			if (Object.isDefined(namespace[className].definition.$extends))
 			{
 				processExtensions(this,namespace[className].definition);
 			}

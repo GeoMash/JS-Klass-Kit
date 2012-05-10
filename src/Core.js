@@ -52,7 +52,7 @@ var $JSKK=
 		}
 		return function(spec,context)
 		{
-			return inOrderDescend(spec, context||window);	
+			return inOrderDescend(spec, context||global);	
 		};
 	})(),
 	/**
@@ -82,9 +82,11 @@ var $JSKK=
 		return results;
 	}
 }
-if (Object.isUndefined(window.console))
+exports.$JSKK=$JSKK;
+
+if (Object.isUndefined(global.console))
 {
-	window.console=
+	global.console=
 	{
 		log:	$JSKK.emptyFunction,
 		debug:	$JSKK.emptyFunction
@@ -92,8 +94,8 @@ if (Object.isUndefined(window.console))
 }
 else
 {
-	if (Object.isUndefined(window.console.debug))
+	if (Object.isUndefined(global.console.debug))
 	{
-		window.console.debug=window.console.log;
+		global.console.debug=global.console.log;
 	}
 }
