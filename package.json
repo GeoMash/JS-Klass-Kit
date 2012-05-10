@@ -1,0 +1,16 @@
+{
+  "name": "jskk",
+  "version": "1.0.0",
+  "author": {
+    "name": "Timothy Chandler",
+    "email": "tim@s3.net.au",
+    "url": "https://github.com/melechi/JS-Klass-Kit"
+  },
+  "description": "A Javascript Classing Engine",
+  "homepage": "https://github.com/melechi/JS-Klass-Kit",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:melechi/JS-Klass-Kit.git"
+  },
+  "main": "./src/Class"
+}
