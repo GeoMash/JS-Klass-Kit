@@ -26,6 +26,18 @@ $JSKK.Class.create
 		}
 	}
 );
+$JSKK.Class.create
+(
+	{
+		$namespace:	'application',
+		$name:		'Main2',
+		$extends:	application.Main
+	}
+)
+(
+	{},
+	{}
+);
 
 $application=new application.Main();
 
@@ -34,3 +46,11 @@ console.debug(application.Main.BAR);
 console.debug(application.Main.BAZ);
 
 application.Main.someStaticMethod();
+
+$application2=new application.Main2();
+
+console.debug(application.Main2.FOO);
+console.debug(application.Main2.BAR);
+console.debug(application.Main2.BAZ);
+
+application.Main2.someStaticMethod();
