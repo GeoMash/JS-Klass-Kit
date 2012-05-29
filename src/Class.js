@@ -278,6 +278,15 @@ $JSKK.Class=
 				}
 				else
 				{
+					for (var prop in definition.$extends)
+					{
+						if (definition.$extends.definition.$statics.methods.inArray(prop)
+						|| definition.$extends.definition.$statics.properties.inArray(prop))
+						{
+							namespace[className][prop]=definition.$extends[prop];
+						}
+					}
+					definition.$statics=Object.extend(definition.$statics,definition.$extends.definition.$statics);
 					namespace[className].prototype=Object.extend(namespace[className].prototype,definition.$extends.prototype);
 				}
 			}
@@ -339,8 +348,20 @@ $JSKK.Class=
 			}
 			
 			//Add the static stuff to the class.
+			if (Object.isUndefined(definition.$statics))
+			{
+				definition.$statics={properties:[],methods:[]};
+			}
 			for (var item in classStatics)
 			{
+				if (Object.isFunction(classStatics[item]))
+				{
+					definition.$statics.methods.push(item);
+				}
+				else
+				{
+					definition.$statics.properties.push(item);
+				}
 				namespace[className][item]=Object.clone(classStatics[item]);
 			}
 			
