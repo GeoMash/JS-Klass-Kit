@@ -1,4 +1,3 @@
-require('./extension/Object');
 $JSKK=require('./Core').$JSKK;
 /**
  * 
@@ -357,13 +356,25 @@ $JSKK.Class=
 				if (Object.isFunction(classStatics[item]))
 				{
 					definition.$statics.methods.push(item);
+//					namespace[className][item]=function(method)
+//					{
+//						var $self='FOO';
+//						
+//						var args	=$JSKK.toArray(arguments);
+//						method.call(this,args);
+//					}.bind(this,classStatics[item]);
 				}
 				else
 				{
 					definition.$statics.properties.push(item);
+//					namespace[className][item]=Object.clone(classStatics[item]);
 				}
 				namespace[className][item]=Object.clone(classStatics[item]);
 			}
+//			for (var i=0,j=definition.$statics.methods.length; i<j; i++)
+//			{
+//				definition.$statics.methods[i]
+//			}
 			
 			//Now apply the new class items.
 			for (var item in classBody)

@@ -9,8 +9,11 @@ $JSKK.Class.create
 )
 (
 	{
+		a:	'bar',
 		foo: function(){
+//			console.log($self);
 			console.log('static foo function called');
+			console.log(application.Main.a);
 		}
 	},
 	{
@@ -30,7 +33,7 @@ $JSKK.Class.create
 )
 (
 	{
-	
+		a:	'foo'
 	},
 	{
 		

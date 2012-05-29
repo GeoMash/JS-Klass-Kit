@@ -1,3 +1,8 @@
+require('./extension/Object');
+require('./extension/Function');
+require('./extension/Array');
+require('./extension/String');
+
 /**
  * @class $JSKK
  * //Description
