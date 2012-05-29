@@ -1,0 +1,1 @@
+This example shows usage of JSKK as a node module.
