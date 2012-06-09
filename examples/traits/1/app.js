@@ -6,11 +6,10 @@ $JSKK.Trait.create
 	}
 )
 (
-	{},
 	{
 		write: function(what)
 		{
-			
+			document.body.innerHTML='Hello '+(what);
 		}
 	}
 );
@@ -19,7 +18,10 @@ $JSKK.Class.create
 (
 	{
 		$namespace:	'application',
-		$name:		'Main'
+		$name:		'Main',
+		$uses:		[
+			behaviour.Writable
+		]
 	}
 )
 (
@@ -32,7 +34,7 @@ $JSKK.Class.create
 		},
 		sayHello: function(who)
 		{
-			document.body.innerHTML='Hello '+(who || this.who);
+			this.write(who || this.who);
 		}
 	}
 );
