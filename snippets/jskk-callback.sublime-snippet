@@ -1,0 +1,7 @@
+<snippet>
+	<content><![CDATA[
+if(Object.isFunction(callback)) callback(${1:[data]});
+]]></content>
+	<tabTrigger>cbk</tabTrigger>
+	<scope>source.js</scope>
+</snippet>

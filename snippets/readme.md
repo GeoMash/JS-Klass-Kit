@@ -1,0 +1,1 @@
+If you are using Sublime Text 2 as your IDE, place these snippet files into your 'Packages / User' folder. They are nifty.

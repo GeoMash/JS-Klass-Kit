@@ -1,0 +1,32 @@
+<snippet>
+	<content><![CDATA[
+\$JSKK.Class.create
+(
+	{
+		\$namespace:	'${1:namespace}',
+		\$name:		'${2:ClassName}',
+		\$requires:	'${3:optional}',
+		\$extends:	${4:optional}
+	}
+)
+(
+	// Static Block
+	{
+	
+	},
+	
+	// Instance Block
+	{
+		/**
+		 * ${1:namespace}.${2:ClassName} Constructor
+		 */
+		init: function()
+		{
+			// constructor
+		}
+	}
+);
+]]></content>
+	<tabTrigger>jskk-class</tabTrigger>
+	<scope>source.js</scope>
+</snippet>

@@ -1,0 +1,1 @@
+Whoever makes some browser based unit tests for JSKK gets the privilege of deleting this file.
