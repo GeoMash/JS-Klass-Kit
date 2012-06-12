@@ -1,3 +1,4 @@
+require('./../../src/Class');
 /**
  * Provides get and set functions, which store properties into the _properties object.
  */
@@ -5,8 +6,7 @@ $JSKK.Class.create
 (
 	{
 		$namespace:	'helper',
-		$name:		'BaseClass',
-		$abstract: 	true
+		$name:		'BaseClass'
 	}
 )
 (
