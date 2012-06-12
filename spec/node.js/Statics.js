@@ -1,4 +1,6 @@
 require('./../../src/Class');
+require('./JasmineSandbox');
+
 $JSKK.Class.create
 (
 	{
@@ -9,13 +11,31 @@ $JSKK.Class.create
 (
 	// Static Block
 	{
-		name: 'default name',
-		foo: 'bar'
+		foo: 'default foo',
+		bar: 'default bar',
+		
+		getFoo: function()
+		{
+			return '?';
+		},
+		
+		getBar: function()
+		{
+			return '?';
+		}
 	},
 	
 	// Instance Block
 	{
+		getFoo: function()
+		{
+			return this.$reflect('self').foo;
+		},
 		
+		getBar: function()
+		{
+			return this.$reflect('self').bar;
+		}
 	}
 );
 
@@ -30,7 +50,7 @@ $JSKK.Class.create
 (
 	// Static Block
 	{
-		name: 'new name'
+		foo: 'new foo'
 	},
 	
 	// Instance Block
@@ -39,8 +59,12 @@ $JSKK.Class.create
 	}
 );
 
-console.log('testing');
-console.log(jskk.test.SuperClass.name);
-console.log(jskk.test.SuperClass["name"]);
-console.log(jskk.test.SuperClass.asasd);
-console.log(jskk.test.SuperClass.foo);
+sandbox
+(
+	function()
+	{
+		console.log('testing');
+		console.log(jskk.test.SuperClass.foo);
+		console.log(jskk.test.SuperClass.bar);
+	}
+);

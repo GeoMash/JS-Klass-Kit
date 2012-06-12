@@ -15,6 +15,8 @@
  *     });
  * 
  * This way you can sandbox your unit tests for output as well as run them as unit tests.
+ * 
+ * @author Dean Rather
  * @param  {function} cbk the sandbox function which does output
  */
 sandbox = function(cbk)
