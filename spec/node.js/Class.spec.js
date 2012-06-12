@@ -1,4 +1,5 @@
 require('jskk');
+
 $JSKK.Class.create
 (
 	{

@@ -24,7 +24,6 @@ $JSKK.Class.create
 	{
 		$namespace:	'jskk.test',
 		$name:		'SubClass',
-		$requires: 	'jskk.test.SuperClass'
 		$extends: 	jskk.test.SuperClass
 	}
 )
