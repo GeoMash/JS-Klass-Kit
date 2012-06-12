@@ -38,6 +38,7 @@ $JSKK.Class.create
 	}
 );
 
+
 // Unit Test (node-jasmine)
 describe
 (
