@@ -1,4 +1,5 @@
 require('./../../src/Class');
+
 /**
  * Provides get and set functions, which store properties into the _properties object.
  */
@@ -42,12 +43,15 @@ $JSKK.Class.create
 			return this;
 		},
 		
-		getProperties: function(properties)
+		getProperties: function(/** list of property names */)
 		{
-			var rtn = {};
-			for(var key in properties)
+			var args = $JSKK.toArray(arguments);
+			var length = args.length;
+			var rtn = [];
+			
+			for(var i=0; i<length; i++)
 			{
-				var val = properties[key];
+				var val = args[i];
 				rtn[val] = this.get(val);
 			}
 			return rtn;

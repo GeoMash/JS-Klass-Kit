@@ -65,14 +65,9 @@ describe
 			"can get lots",
 			function()
 			{
-				var properties = a.getProperties(['foo', 'bar']);
-				
-				// var properties = {'a':'hello', 'gogo':123};
-				// console.log(properties);
-				
+				var properties = a.getProperties('foo', 'bar');
 				expect(properties['foo']).toBe(1);
 				expect(properties['bar']).toBe(2);
-				
 			}
 		)
 	}
