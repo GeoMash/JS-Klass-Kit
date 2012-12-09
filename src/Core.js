@@ -87,7 +87,10 @@ if (Object.isUndefined(window.console))
 	window.console=
 	{
 		log:	$JSKK.emptyFunction,
-		debug:	$JSKK.emptyFunction
+		debug:	$JSKK.emptyFunction,
+		warn:	$JSKK.emptyFunction,
+		info:	$JSKK.emptyFunction,
+		trace:	$JSKK.emptyFunction
 	}
 }
 else
