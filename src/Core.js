@@ -5,11 +5,11 @@
  * 
  * 
  * @author Timothy Chandler tim@s3.net.au
- * @version 1.0.0
+ * @version 1.0.2
  */
 var $JSKK=
 {
-	version:		'1.0.0',
+	version:		'1.0.2',
 	emptyFunction:	function(){},
 	/**
 	 * Use this function to create a namespace.
