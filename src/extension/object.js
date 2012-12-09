@@ -25,18 +25,27 @@ Object.extend=function(destination,source)
 		if (destination==null || Object.isUndefined(destination))destination={};
 		for (var property in source)
 		{
-			if (Object.isAssocArray(source))
+			//If the source is null, simply set it to null.
+			if (Object.isNull(source[property]))
 			{
-				if (Object.isUndefined(destination[property])
-				|| destination[property]==null
-				|| destination[property]==false
-				)destination[property]={};
+				destination[property]=null;
+			}
+			//If the source is an object, we need to extend down into it.
+			else if (Object.isAssocArray(source[property]))
+			{
+				//Force the destination to be an object if it isn't already one.
+				if (!Object.isAssocArray(destination[property]))
+				{
+					destination[property]={};
+				}
 				destination[property]=Object.extend(destination[property],source[property]);
 			}
+			//If the source is an array, we need to extend down into it.
 			else if (Object.isArray(source[property]))
 			{
 				destination[property]=Object.extend(destination[property],source[property]);
 			}
+			//For everything else, do a direct set which will remove the reference.
 			else
 			{
 				destination[property]=source[property];
@@ -47,7 +56,6 @@ Object.extend=function(destination,source)
 	else if (Object.isArray(source))
 	{
 		if (!Object.isArray(destination))destination=[];
-//		for (var i=(source.length-1); i; i--)//Get infinate loop with this. Weird...?
 		for (var i=0,j=source.length; i<j; i++)
 		{
 			destination[i]=Object.extend(destination[i],source[i]);
@@ -183,6 +191,7 @@ Object.isNull=			function(object)
  */
 Object.isAssocArray=	function(object)
 {
+	if (object===null)return false;
 	return Object.prototype.toString.call(object)==='[object Object]';
 }
 /**
