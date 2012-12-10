@@ -134,11 +134,6 @@ else:
 	targetDir=os.path.abspath('.')
 
 if args.config:
-	print "Compressing JSKK..."
-	print "dir:"+args.dir
-	print "config:"+args.config
-	print "file:"+args.file
-	
 	compressor=Compress()
 	result+=compressor.compressFramework(
 		configFile	=args.config,
