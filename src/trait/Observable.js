@@ -28,7 +28,6 @@ $JSKK.Trait.create
 						{
 							this.observe(listener,listeners[listener]);
 						}
-						listeners[listener];
 					}
 				}
 				else if (Object.isFunction(listeners[listener]))
