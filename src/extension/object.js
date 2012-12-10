@@ -139,7 +139,9 @@ Object.isNumber=		function(object)
  */
 Object.isNumeric=		function(object)
 {
-	return object!='' && Object.prototype.toString.call(object)!=='[object Array]' && !isNaN(Number(object));
+	return 	object!==null	&& typeof object!='boolean'
+							&& Object.prototype.toString.call(object)!=='[object Array]'
+							&& !isNaN(Number(object));
 }
 /**
  * Checks if the given object is a DOM element.
