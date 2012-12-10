@@ -1,0 +1,19 @@
+{
+	"files":
+	[
+		"extension/Object.js",
+		"extension/Function.js",
+		"extension/Array.js",
+		"extension/String.js",
+		"Core.js",
+		"Interface.js",
+		"Trait.js",
+		"Class.js",
+		"When.js",
+		"iface/Configurable.js",
+		"iface/Observable.js",
+		"trait/Configurable.js",
+		"trait/Observable.js",
+		"trait/Timeable.js"
+	]
+}
