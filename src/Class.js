@@ -210,7 +210,6 @@ $JSKK.Class=
 			{
 				processExtensions(this,namespace[className].definition);
 			}
-			delete processExtensions;
 			//Finally, initiate the class.
 			if (Object.isFunction(this.init))
 			{
@@ -294,7 +293,6 @@ $JSKK.Class=
 					$JSKK.Trait.add(namespace[className],normalizedTrait);
 				}
 			}
-			delete normalizedTrait;
 			
 			//Create a reflection method.
 			namespace[className].prototype.$reflect=function(what)

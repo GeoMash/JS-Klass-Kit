@@ -85,7 +85,6 @@ $JSKK.Trait=
 					$JSKK.Trait.add(namespace[traitName],normalizedTrait);
 				}
 			}
-			delete normalizedTrait;
 			
 			for (var item in traitBody)
 			{

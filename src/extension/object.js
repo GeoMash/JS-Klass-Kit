@@ -51,7 +51,6 @@ Object.extend=function(destination,source)
 				destination[property]=source[property];
 			}
 		}
-		delete property;
 	}
 	else if (Object.isArray(source))
 	{
@@ -60,7 +59,6 @@ Object.extend=function(destination,source)
 		{
 			destination[i]=Object.extend(destination[i],source[i]);
 		}
-		delete i,j;
 	}
 	else
 	{
