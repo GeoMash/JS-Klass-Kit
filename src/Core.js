@@ -11,6 +11,7 @@ var $JSKK=
 {
 	version:		'1.0.2',
 	emptyFunction:	function(){},
+	global:			window || global || null,
 	/**
 	 * Use this function to create a namespace.
 	 * 
@@ -52,7 +53,7 @@ var $JSKK=
 		}
 		return function(spec,context)
 		{
-			return inOrderDescend(spec, context||window);	
+			return inOrderDescend(spec, context||$JSKK.global);	
 		};
 	})(),
 	/**
@@ -82,9 +83,9 @@ var $JSKK=
 		return results;
 	}
 }
-if (Object.isUndefined(window.console))
+if (Object.isUndefined($JSKK.global.console))
 {
-	window.console=
+	$JSKK.global.console=
 	{
 		log:	$JSKK.emptyFunction,
 		debug:	$JSKK.emptyFunction,
@@ -95,8 +96,8 @@ if (Object.isUndefined(window.console))
 }
 else
 {
-	if (Object.isUndefined(window.console.debug))
+	if (Object.isUndefined($JSKK.global.console.debug))
 	{
-		window.console.debug=window.console.log;
+		$JSKK.global.console.debug=$JSKK.global.console.log;
 	}
 }
