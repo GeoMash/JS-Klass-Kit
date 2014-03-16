@@ -50,7 +50,7 @@ $JSKK.Trait=
 				case 'type':		return definition.$type;
 				case 'namespace':	return definition.$namespace;
 				case 'name':		return definition.$name;
-				case 'extends':		return definition.$extends;
+				// case 'extends':		return definition.$extends;
 				case 'implements':	return definition.$implements;
 				case 'uses':		return definition.$uses;
 			}
@@ -103,20 +103,32 @@ $JSKK.Trait=
 	{
 		//If traits is not an array, make it one so its easier to deal with.
 		if (!Object.isArray(traits))traits=[traits];
-		//Pluck out the conflict resultion object if present.
+		//Pluck out the conflict resolution object if present.
 		var conflictResolutions={};
-		if (!Object.isFunction(traits[traits.length-1]))
+		if (!Object.isFunction(traits[traits.length-1])
+		&& !Object.isString(traits[traits.length-1]))
 		{
 			conflictResolutions=traits[traits.length-1];
 			delete traits[traits.length-1];
 		}
 		//Now loop through each trait and see if there are any conflicts.
-		var normalizedTrait					=function(){};
+		var	normalizedTrait					=function(){},
+			methods							=[],
+			resolved						=[];
 		normalizedTrait.prototype.traitName	='Normalized';
-		var methods							=[];
-		var resolved						=[];
 		for (var i=0,j=traits.length; i<j; i++)
 		{
+			if (Object.isDefined(traits[i]))
+			{
+				if (Object.isString(traits[i]))
+				{
+					traits[i]=$JSKK.strToObject(traits[i]);
+				}
+				else
+				{
+					console.warn('Using object literals is deprecated as of JSKK v1.1 and will be disabled in v1.2. Please use strings instead.');
+				}
+			}
 			if (Object.isFunction(traits[i]))
 			{
 				//Loop through each method in this trait.

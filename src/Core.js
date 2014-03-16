@@ -5,11 +5,11 @@
  * 
  * 
  * @author Timothy Chandler tim@s3.net.au
- * @version 1.0.2
+ * @version 1.1.0
  */
 var $JSKK=
 {
-	version:		'1.0.2',
+	version:		'1.1.0',
 	emptyFunction:	function(){},
 	global:			window || global || null,
 	/**
@@ -48,6 +48,7 @@ var $JSKK=
 			}
 			else
 			{
+				console.trace();
 				throw new TypeError();
 			}
 		}
@@ -81,7 +82,96 @@ var $JSKK=
 			results=new Array(length);
 		while (length--)results[length]=iterable[length];
 		return results;
+	},
+	strToObject: function(string)
+	{
+		var	obj		=$JSKK.global,
+			parts	=string.split('.');
+		
+		for (var i=0,j=parts.length; i<j; i++)
+		{
+			if (Object.isDefined(obj[parts[i]]))
+			{
+				obj=obj[parts[i]];
+			}
+			else
+			{
+				throw new Error('Invalid string to object. Object "'+string+'" has not been loaded.');
+			}
+		}
+		return obj;
+	},
+	require: function(requires,callback)
+	{
+		if (Object.isDefined(requires))
+		{
+			var formattedRequires=[];
+			if (!Object.isArray(requires))
+			{
+				requires=[requires];
+			}
+			for (var i=0,j=requires.length; i<j; i++)
+			{
+				if (Object.isString(requires[i]))
+				{
+					try
+					{
+						$JSKK.strToObject(requires[i]);
+					}
+					catch (e)
+					{
+						formattedRequires.push(requires[i].replace(/\./g,'/'));
+					}
+				}
+				else
+				{
+					throw new Error('Object literal "'+requires[i]+'" used in require. Only use strings.');
+				}
+				// console.info('Requiring "'+requires[i]+'".');
+			}
+			var check=function(requires)
+			{
+				for (var i=0,j=requires.length; i<j; i++)
+				{
+					try
+					{
+						var obj=$JSKK.strToObject(requires[i]);
+						// console.debug(requires[i],obj.definition);
+						if (Object.isUndefined(obj.prototype.$reflect))
+						{
+							// console.debug(requires[i]+' is not ready... waiting... 2');
+							window.setTimeout(check,50);
+							return;
+						}
+					}
+					catch (e)
+					{
+						// console.debug(requires[i]+' is not ready... waiting... 1');
+						window.setTimeout(check,50);
+						return;
+					}
+				}
+				// console.debug('all requires ready!!!');
+				callback();
+			}.bind(this,requires);
+			if (formattedRequires.length)
+			{
+				requirejs(formattedRequires,check);
+			}
+			else
+			{
+				callback();
+			}
+		}
 	}
+}
+if (Object.isDefined(window))
+{
+	$JSKK.global.$JSKK=$JSKK;
+}
+else
+{
+	exports.$JSKK=$JSKK;
 }
 if (Object.isUndefined($JSKK.global.console))
 {

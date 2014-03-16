@@ -3,7 +3,7 @@ $JSKK.Trait.create
 	{
 		$namespace:		'$JSKK.trait',
 		$name:			'Observable',
-		$implements:	$JSKK.iface.Observable
+		$implements:	'$JSKK.iface.Observable'
 	}
 )
 (

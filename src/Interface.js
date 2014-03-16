@@ -51,8 +51,36 @@ $JSKK.Interface=
 			].join('');
 		}
 		
+		
+		
 		//Set the class type.
 		definition.$type='interface';
+		
+		if (Object.isDefined(definition.$extends))
+		{
+			if (Object.isString(definition.$extends))
+			{
+				var	obj		=$JSKK.global,
+					parts	=definition.$extends.split('.');
+				
+				for (var i=0,j=parts.length; i<j; i++)
+				{
+					if (Object.isDefined(obj[parts[i]]))
+					{
+						obj=obj[parts[i]];
+					}
+					else
+					{
+						throw new Error('Invalid extension. Class "'+definition.$extends+'" has not been loaded.');
+					}
+				}
+				definition.$extends=obj;
+			}
+			else
+			{
+				console.warn('Using object literals is deprecated as of JSKK v1.1 and will be disabled in v1.2. Please use strings instead.');
+			}
+		}
 		
 		//Create a reflection method.
 		namespace[interfaceName].prototype.$reflect=function(what)
@@ -130,10 +158,11 @@ $JSKK.Interface=
 				]
 			);
 		}
-		else if (thisInterface.$type=='interface')
-		{
-			throw new Error('Unable to implement interface. Interface to implement is not an instance of "$JSKK.Interface".');
-		}
+		// else if (thisInterface.$type!='interface')
+		// {
+		// 	console.debug(thisInterface.$type);
+		// 	throw new Error('Unable to implement interface. Interface to implement is not an instance of "$JSKK.Interface".');
+		// }
 		return true;
 	},
 	add: function(Class,classBody,trait,thisInterface)

@@ -3,7 +3,7 @@ $JSKK.Trait.create
 	{
 		$namespace:	'$JSKK.trait',
 		$name:		'Timeable',
-		$traits:	$JSKK.trait.Observable
+		$uses:		'$JSKK.trait.Observable'
 	}
 )
 (

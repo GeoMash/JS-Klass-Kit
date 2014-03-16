@@ -19,11 +19,11 @@ $JSKK.Class=
 	 */
 	create: function(definition)
 	{
+		var def={};
 		if (typeof definition=='string')
 		{
 			var	namespace	=$JSKK.global,
-				className	=definition,
-				def			={};
+				className	=definition;
 			
 			def.$name		=definition;
 			def.$namespace	=(window)?'window':'global';
@@ -54,31 +54,12 @@ $JSKK.Class=
 		//When a new instance of the class is created, this is where it all begins.
 		namespace[className]=function()
 		{
-			if (definition.$abstract)
-			{
-				throw '"'+className+'" is an abstract class and cannot be directly initiated.';
-			}
-			//The first and most important thing to do is to make a clone of the class prototype.
-			var prototype=Object.clone(namespace[className].prototype);
-			
-			//Make arguments easier to work with.
-			var args=$JSKK.toArray(arguments);
-			//Handle trait related initiation functionality.
-			if (namespace[className].prototype.__behaviors.length)
-			{
-				for (var i=0,j=namespace[className].prototype.__behaviors.length; i<j; i++)
-				{
-					var thisArg=args.shift();
-					namespace[className].prototype.__behaviors[i].call(this,thisArg);
-				}
-			}
-			//Now restore the class prototype back to its original form.
-			namespace[className].prototype=prototype;
 			//Private Extension Functions
 			var processExtensions=function(scope,definition)
 			{
 				var doNextExtend=function(scope,object,$parent,extension,args)
 				{
+					//THIS WILL HANDLE PARENT METHOD CALLS - eg: this.init.$parent()
 					//Save the old $parent in a temp var.
 					var tmp=scope[object].$parent;
 					//Now override this method with a new one.
@@ -122,7 +103,9 @@ $JSKK.Class=
 					//Restore the old $parent method.
 					scope[object].$parent=tmp;
 					return ret;
-				}
+				}//end doNextExtend
+				
+				
 				var doExtend=function(scope,object,extension)
 				{
 					var func=scope[object];
@@ -169,7 +152,8 @@ $JSKK.Class=
 						//Execute this method.
 						return func.apply(scope,arguments);
 					}
-				}
+				}//end doExtend
+				
 				if (!Object.isUndefined(definition.$extends))
 				{
 					for (object in definition.$extends.prototype)
@@ -206,152 +190,220 @@ $JSKK.Class=
 					}
 				}
 			}
-			if (!Object.isUndefined(namespace[className].definition.$extends))
+			//Make arguments easier to work with.
+			var init=function(args)
 			{
-				processExtensions(this,namespace[className].definition);
-			}
-			//Finally, initiate the class.
-			if (Object.isFunction(this.init))
-			{
-				this.init.apply(this,args);
-			}
+				if (Object.isUndefined(namespace[className].definition))
+				{
+					window.setTimeout(init,200);
+				}
+				else
+				{
+					if (definition.$abstract)
+					{
+						throw '"'+className+'" is an abstract class and cannot be directly initiated.';
+					}
+					//The first and most important thing to do is to make a clone of the class prototype.
+					var prototype=Object.clone(namespace[className].prototype);
+					
+					//Handle trait related initiation functionality.
+					if (Object.isDefined(namespace[className].prototype.__behaviors)
+					&& namespace[className].prototype.__behaviors.length)
+					{
+						for (var i=0,j=namespace[className].prototype.__behaviors.length; i<j; i++)
+						{
+							var thisArg=args.shift();
+							namespace[className].prototype.__behaviors[i].call(this,thisArg);
+						}
+					}
+					//Now restore the class prototype back to its original form.
+					namespace[className].prototype=prototype;
+					
+					if (!Object.isUndefined(namespace[className].definition.$extends))
+					{
+						processExtensions(this,namespace[className].definition);
+					}
+					//Finally, initiate the class.
+					if (Object.isFunction(this.init))
+					{
+						this.init.apply(this,args);
+					}
+				}
+			}.bind(this,$JSKK.toArray(arguments))
+			init();
 		};
 		return function(classStatics,classBody)
 		{
-			//Do the extending first, because the new class body and traits will overwrite existing methods and properties.
-			if (Object.isDefined(definition.$extends))
+			var exec=function(namespace,classStatics,classBody)
 			{
-				if (Object.isUndefined(definition.$extends))
+				//Do the extending first, because the new class body and traits will overwrite existing methods and properties.
+				if (Object.isDefined(this.$extends))
 				{
-					throw new Error('Unable to extend class. Class to extend from is undefined.');
-				}
-				else if (definition.$extends.definition.$type=='interface')
-				{
-					throw new Error('Unable to extend class from interface. Use $implements followed by interface.');
-				}
-				else if (definition.$extends.definition.$type=='trait')
-				{
-					throw new Error('Unable to extend class from trait. Use $uses followed by the trait or an array of traits.');
-				}
-				else if (!Object.isFunction(definition.$extends.prototype.$reflect))
-				{
-					throw new Error('Unable to extend class. Class to extend from is not an instance of "$JSKK.Class".');
-				}
-				else if (Object.isDefined(definition.$extends.definition.$final) && definition.$extends.definition.$final)
-				{
-					throw new Error('Unable to extend class. Class to extend from is declared as final.');
-				}
-				else
-				{
-					for (var prop in definition.$extends)
+					if (Object.isUndefined(this.$extends.definition))
 					{
-						if (definition.$extends.definition.$statics.methods.inArray(prop)
-						|| definition.$extends.definition.$statics.properties.inArray(prop))
+						window.setTimeout
+						(
+							exec.bind(this,namespace,classStatics,classBody),
+							200
+						);
+						return;
+					}
+					if (this.$extends.definition.$type=='interface')
+					{
+						throw new Error('Unable to extend class from interface. Use $implements followed by interface.');
+					}
+					else if (this.$extends.definition.$type=='trait')
+					{
+						throw new Error('Unable to extend class from trait. Use $uses followed by the trait or an array of traits.');
+					}
+					else if (!Object.isFunction(this.$extends.prototype.$reflect))
+					{
+						throw new Error('Unable to extend class. Class to extend from is not an instance of "$JSKK.Class".');
+					}
+					else if (Object.isDefined(this.$extends.definition.$final) && this.$extends.definition.$final)
+					{
+						throw new Error('Unable to extend class. Class to extend from is declared as final.');
+					}
+					else
+					{
+						for (var prop in this.$extends)
 						{
-							namespace[className][prop]=definition.$extends[prop];
+							if (this.$extends.definition.$statics.methods.inArray(prop)
+							|| this.$extends.definition.$statics.properties.inArray(prop))
+							{
+								namespace[className][prop]=this.$extends[prop];
+							}
+						}
+						this.$statics=Object.extend(this.$statics,this.$extends.definition.$statics);
+						namespace[className].prototype=Object.extend(namespace[className].prototype,this.$extends.prototype);
+					}
+				}
+				if (Object.isUndefined(namespace[className].prototype))
+				{
+					namespace[className].prototype={};
+				}
+				//Normalize the traits before adding them so that the normalized
+				//trait can be used to validate any interfaces.
+				var normalizedTrait=false;
+				if (!Object.isArray(namespace[className].prototype.__behaviors))
+				{
+					namespace[className].prototype.__behaviors=[];
+				}
+				if (!Object.isUndefined(this.$uses))
+				{
+					normalizedTrait=$JSKK.Trait.normalize(this.$uses);
+					for (var i=0,j=this.$uses.length; i<j; i++)
+					{
+						if (Object.isFunction(this.$uses[i]) && Object.isFunction(this.$uses[i].prototype.init))
+						{
+							namespace[className].prototype.__behaviors.push(this.$uses[i].prototype.init);
 						}
 					}
-					definition.$statics=Object.extend(definition.$statics,definition.$extends.definition.$statics);
-					namespace[className].prototype=Object.extend(namespace[className].prototype,definition.$extends.prototype);
+					if (!Object.isArray(this.$uses))this.$uses=[this.$uses];
 				}
-			}
-			
-			//Normalize the traits before adding them so that the normalized
-			//trait can be used to validate any interfaces.
-			var normalizedTrait=false;
-			if (!Object.isArray(namespace[className].prototype.__behaviors))namespace[className].prototype.__behaviors=[];
-			if (!Object.isUndefined(definition.$uses))
-			{
-				if (!Object.isArray(definition.$uses))definition.$uses=[definition.$uses];
-				normalizedTrait=$JSKK.Trait.normalize(definition.$uses);
-				for (var i=0,j=definition.$uses.length; i<j; i++)
+				//Handle implementation of interfaces.
+				if (!Object.isUndefined(this.$implements))
 				{
-					if (Object.isFunction(definition.$uses[i]) && Object.isFunction(definition.$uses[i].prototype.init))
+					if (!Object.isArray(this.$implements))this.$implements=[this.$implements];
+					for (var i=0,j=this.$implements.length; i<j; i++)
 					{
-						namespace[className].prototype.__behaviors.push(definition.$uses[i].prototype.init);
-					}
-				}
-				if (!Object.isArray(definition.$uses))definition.$uses=[definition.$uses];
-			}
-			//Handle implementation of interfaces.
-			if (!Object.isUndefined(definition.$implements))
-			{
-				if (!Object.isArray(definition.$implements))definition.$implements=[definition.$implements];
-				for (var i=0,j=definition.$implements.length; i<j; i++)
-				{
-					if ($JSKK.Interface.validate(definition.$implements[i]))
-					{
-						$JSKK.Interface.add(namespace[className],classBody,normalizedTrait,definition.$implements[i]);
-					}
-				}
-			}
-			//Handle adding traits.
-			if (!Object.isUndefined(definition.$uses))
-			{
-				if ($JSKK.Trait.validate(normalizedTrait))
-				{
-					$JSKK.Trait.add(namespace[className],normalizedTrait);
-				}
-			}
-			
-			//Create a reflection method.
-			namespace[className].prototype.$reflect=function(what)
-			{
-				switch (what)
-				{
-					case 'type':		return definition.$type;
-					case 'namespace':	return definition.$namespace;
-					case 'name':		return definition.$name;
-					case 'extends':		return definition.$extends;
-					case 'implements':	return definition.$implements;
-					case 'uses':		return definition.$uses;
-					case 'abstract':	return definition.$abstract	|| false;
-					case 'final':		return definition.$final	|| false;
-					case 'self':		return namespace[className];
-				}
-			}
-			
-			//Add the static stuff to the class.
-			if (Object.isUndefined(definition.$statics))
-			{
-				definition.$statics={properties:[],methods:[]};
-			}
-			for (var item in classStatics)
-			{
-				if (Object.isFunction(classStatics[item]))
-				{
-					definition.$statics.methods.push(item);
-				}
-				else
-				{
-					definition.$statics.properties.push(item);
-				}
-				namespace[className][item]=Object.clone(classStatics[item]);
-			}
-			
-			//Now apply the new class items.
-			for (var item in classBody)
-			{
-				if (Object.isFunction(classBody[item]))
-				{
-					if (classBody[item]===$JSKK.Class.ABSTRACT_METHOD)
-					{
-						if (!definition.$abstract)
+						if (Object.isDefined(this.$implements[i]))
 						{
-							throw '"'+className+'" contains one or more abstract methods and must be declared as abstract.';
+							if (Object.isString(this.$implements[i]))
+							{
+								this.$implements[i]=$JSKK.strToObject(this.$implements[i]);
+							}
+							else
+							{
+								console.warn('Using object literals is deprecated as of JSKK v1.1 and will be disabled in v1.2. Please use strings instead.');
+							}
 						}
+						if ($JSKK.Interface.validate(this.$implements[i]))
+						{
+							$JSKK.Interface.add(namespace[className],classBody,normalizedTrait,this.$implements[i]);
+						}
+					}
+				}
+				//Handle adding traits.
+				if (!Object.isUndefined(this.$uses))
+				{
+					if ($JSKK.Trait.validate(normalizedTrait))
+					{
+						$JSKK.Trait.add(namespace[className],normalizedTrait);
+					}
+				}
+				
+				//Create a reflection method.
+				namespace[className].prototype.$reflect=function(what)
+				{
+					switch (what)
+					{
+						case 'type':		return this.$type;
+						case 'namespace':	return this.$namespace;
+						case 'name':		return this.$name;
+						case 'extends':		return this.$extends;
+						case 'implements':	return this.$implements;
+						case 'uses':		return this.$uses;
+						case 'abstract':	return this.$abstract	|| false;
+						case 'final':		return this.$final		|| false;
+						case 'requires':	return this.$requires	|| false;
+						case 'self':		return namespace[className];
+					}
+				}.bind(this)
+				
+				//Add the static stuff to the class.
+				if (Object.isUndefined(this.$statics))
+				{
+					this.$statics={properties:[],methods:[]};
+				}
+				for (var item in classStatics)
+				{
+					if (Object.isFunction(classStatics[item]))
+					{
+						this.$statics.methods.push(item);
+					}
+					else
+					{
+						this.$statics.properties.push(item);
+					}
+					namespace[className][item]=Object.clone(classStatics[item]);
+				}
+				
+				//Now apply the new class items.
+				for (var item in classBody)
+				{
+					if (Object.isFunction(classBody[item]))
+					{
+						if (classBody[item]===$JSKK.Class.ABSTRACT_METHOD)
+						{
+							if (!this.$abstract)
+							{
+								throw '"'+className+'" contains one or more abstract methods and must be declared as abstract.';
+							}
+							else
+							{
+								namespace[className].prototype[item]=Object.clone(classBody[item]);
+							}
+						}
+						if (Object.isFunction(namespace[className].prototype[item]))
+						{
+							var tmp=namespace[className].prototype[item];
+							namespace[className].prototype[item]=classBody[item];
+							namespace[className].prototype[item].$parent=tmp;
+						}
+						//TODO: Clean up this duplacated code.
 						else
 						{
-							namespace[className].prototype[item]=Object.clone(classBody[item]);
+							if (Object.isAssocArray(classBody[item]))
+							{
+								namespace[className].prototype[item]=Object.clone(classBody[item]);
+							}
+							else
+							{
+								namespace[className].prototype[item]=classBody[item];
+							}
 						}
 					}
-					if (Object.isFunction(namespace[className].prototype[item]))
-					{
-						var tmp=namespace[className].prototype[item];
-						namespace[className].prototype[item]=classBody[item];
-						namespace[className].prototype[item].$parent=tmp;
-					}
-					//TODO: Clean up this duplacated code.
 					else
 					{
 						if (Object.isAssocArray(classBody[item]))
@@ -364,36 +416,100 @@ $JSKK.Class=
 						}
 					}
 				}
+				for (item in namespace[className].prototype)
+				{
+					if (Object.isFunction(namespace[className].prototype[item])
+					&& namespace[className].prototype[item]===$JSKK.Class.ABSTRACT_METHOD
+					&& !this.$abstract)
+					{
+						throw [
+							'"'+item+'" is an abstract method and so must either be defined or the class ',
+							' "'+className+'" must be declared as abstract by defining',
+							' $abstract:true in the class definition.'
+						].join('')
+					}
+				}
+				namespace[className].toString=function()
+				{
+					return '[JSKK Class ('+this.$namespace+'.'+this.$name+')]';
+				}.bind(this)
+				namespace[className].definition=this;
+			}//end exec
+			
+			if (!Object.isArray(definition.$requires))
+			{
+				if (Object.isDefined(definition.$requires))
+				{
+					definition.$requires=[definition.$requires];
+				}
 				else
 				{
-					if (Object.isAssocArray(classBody[item]))
+					definition.$requires=[];
+				}
+			}
+			
+			// $JSKK.require
+			// (
+			// 	definition.$requires,
+			// 	exec.bind(definition,namespace,classStatics,classBody)
+			// );
+			var readyRequiresAndExec=function()
+			{
+				//Extends SHOULD be ready at this stage.
+				if (Object.isDefined(definition.$extends))
+				{
+					if (Object.isString(definition.$extends))
 					{
-						namespace[className].prototype[item]=Object.clone(classBody[item]);
+						definition.$extends=$JSKK.strToObject(definition.$extends);
 					}
 					else
 					{
-						namespace[className].prototype[item]=classBody[item];
+						console.warn('The use of object literals is deprecated in JSKK 1.1. Use strings instead.');
 					}
 				}
-			}
-			for (item in namespace[className].prototype)
-			{
-				if (Object.isFunction(namespace[className].prototype[item])
-				&& namespace[className].prototype[item]===$JSKK.Class.ABSTRACT_METHOD
-				&& !definition.$abstract)
+				if (Object.isDefined(definition.$uses))
 				{
-					throw [
-						'"'+item+'" is an abstract method and so must either be defined or the class ',
-						' "'+className+'" must be declared as abstract by defining',
-						' $abstract:true in the class definition.'
-					].join('')
+					if (!Object.isArray(definition.$uses))
+					{
+						definition.$uses=[definition.$uses];
+					}
+					definition.$requires=definition.$requires.concat(definition.$uses);
 				}
-			}
-			namespace[className].toString=function()
+				if (Object.isDefined(definition.$implements))
+				{
+					if (!Object.isArray(definition.$implements))
+					{
+						definition.$implements=[definition.$implements];
+					}
+					definition.$requires=definition.$requires.concat(definition.$uses);
+				}
+				if (Object.isDefined(definition.$requires) && definition.$requires.length)
+				{
+					$JSKK.require
+					(
+						definition.$requires,
+						exec.bind(definition,namespace,classStatics,classBody)
+					);
+				}
+				else
+				{
+					exec.bind(definition)(namespace,classStatics,classBody);
+				}
+			}.bind(this)
+			
+			
+			if (Object.isDefined(definition.$extends))
 			{
-				return '[JSKK Class ('+definition.$namespace+'.'+definition.$name+')]';
+				$JSKK.require
+				(
+					[definition.$extends],
+					readyRequiresAndExec
+				);
 			}
-			namespace[className].definition=definition;
+			else
+			{
+				readyRequiresAndExec();
+			}
 		}
 	},
 	ABSTRACT_METHOD: function(){}

@@ -1,8 +1,9 @@
+
 $JSKK.Class.create
 (
 	{
 		$namespace:	'$JSKK',
-		$name:		'When'
+		$name:		'When_'
 	}
 )
 (
@@ -173,7 +174,7 @@ $JSKK.Class.create
 		}
 	}
 );
-$JSKK.When=new $JSKK.When();
+$JSKK.When=new $JSKK.When_();
 $JSKK.when=function(scope,object)
 {
 	var	id		=$JSKK.When.addItem(scope,object),

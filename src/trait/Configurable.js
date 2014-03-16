@@ -3,7 +3,7 @@ $JSKK.Trait.create
 	{
 		$namespace:		'$JSKK.trait',
 		$name:			'Configurable',
-		$implements:	$JSKK.iface.Configurable
+		$implements:	'$JSKK.iface.Configurable'
 	}
 )
 (
