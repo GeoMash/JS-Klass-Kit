@@ -1,10 +1,10 @@
 {
 	"name": "geomash/jskk",
-	"description": "JavaScript Klass Kit",
+	"description": "JavaScript Klass Kit - Object Orientated JavaScript framework.",
 	"keywords": ["javascript", "class", "framework"],
 	"type": "javascript-library",
 	"homepage": "https://github.com/melechi/JS-Klass-Kit",
-	"license": "private",
+	"license": "GPL3",
 	"authors":
 	[
 		{
