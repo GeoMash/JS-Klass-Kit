@@ -21,12 +21,12 @@ $JSKK.Class=
 	{
 		if (typeof definition=='string')
 		{
-			var	namespace	=window,
+			var	namespace	=$JSKK.global,
 				className	=definition,
 				def			={};
 			
 			def.$name		=definition;
-			def.$namespace	='window';
+			def.$namespace	=(window)?'window':'global';
 			definition		=def;
 		}
 		else
@@ -40,8 +40,8 @@ $JSKK.Class=
 				var className=definition.$name;
 				if (Object.isUndefined(definition.$namespace))
 				{
-					definition.$namespace='window';
-					var namespace=window;
+					def.$namespace	=(window)?'window':'global';
+					var namespace	=$JSKK.global;
 				}
 				else
 				{
