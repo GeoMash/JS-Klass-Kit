@@ -1,8 +1,8 @@
 {
 	"name": "geomash/jskk",
 	"description": "JavaScript Klass Kit",
-	"keywords": ["geomash", "geospatial", "debug"],
-	"type": "application",
+	"keywords": ["javascript", "class", "framework"],
+	"type": "javascript-library",
 	"homepage": "https://github.com/melechi/JS-Klass-Kit",
 	"license": "private",
 	"authors":
