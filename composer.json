@@ -1,0 +1,22 @@
+{
+	"name": "geomash/jskk",
+	"description": "JavaScript Klass Kit",
+	"keywords": ["geomash", "geospatial", "debug"],
+	"type": "application",
+	"homepage": "https://github.com/melechi/JS-Klass-Kit",
+	"license": "private",
+	"authors":
+	[
+		{
+			"name": "GeoMash",
+			"homepage": "http://www.geomash.com/"
+		}
+	],
+	"repositories":
+	[
+		{
+			"type": "git",
+			"url":  "http://git.geomash.com/open-source/composer-installers.git"
+		}
+	]
+}
