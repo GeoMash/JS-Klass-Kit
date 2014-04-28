@@ -95,3 +95,4 @@ Object.extend
 		}
 	}
 );
+define('extension/Function', function(){});

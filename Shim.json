@@ -1,0 +1,7 @@
+{
+	"iface/Configurable":	{"deps":["Core"]},
+	"iface/Observable":		{"deps":["Core"]},
+	"trait/Configurable":	{"deps":["Core"]},
+	"trait/Observable":		{"deps":["Core"]},
+	"trait/Timeable":		{"deps":["Core"]}
+}
