@@ -92,3 +92,4 @@ Object.extend
 		}
 	}
 );
+define('extension/String', function(){});

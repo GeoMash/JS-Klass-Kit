@@ -1,0 +1,16 @@
+define
+(
+	'JSKK',
+	[
+		'./Core',
+		'./Interface',
+		'./Trait',
+		'./Class',
+		'./When',
+		'./iface/Configurable',
+		'./iface/Observable',
+		'./trait/Configurable',
+		'./trait/Observable',
+		'./trait/Timeable'
+	]
+);

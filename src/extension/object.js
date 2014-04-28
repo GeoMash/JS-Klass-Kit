@@ -1,14 +1,3 @@
-/*
- * Petim Web Tools v1.0
- * Copyright(c) 2008, Petim Pty. Ltd.
- * licensing@petim.com.au
- * 
- * See packaged license.txt
- * OR URL:
- * http://www.petim.com.au/products/pwt/license/view/
- * for full license terms.
- */
-
 /**
  * Deeply extends or merges one object into another object.
  * Note that this function will in most cases copy the properties,
@@ -434,3 +423,4 @@ Object.isEqual=function(object1,object2)
 	}
 	return true;
 }
+define('extension/Object', function(){});

@@ -209,3 +209,4 @@ Object.extend
 		}
 	}
 );
+define('extension/Array', function(){});

@@ -7,187 +7,202 @@
  * @author Timothy Chandler tim@s3.net.au
  * @version 1.1.0
  */
-var $JSKK=
-{
-	version:		'1.1.0',
-	emptyFunction:	function(){},
-	global:			window || global || null,
-	/**
-	 * Use this function to create a namespace.
-	 * 
-	 * This function will safely create a namespace and return it for use.
-	 * Use this function before adding anything to a namespaced object to assure
-	 * it exists and you won't suffer data loss.
-	 * 
-	 * @member $JSKK
-	 * @param {String} namespace A string representation of the namespace to be created.
-	 * @return {Object} namespace
-	 */
-	namespace:(function()
+define
+(
+	'Core',
+	[
+		'./extension/Object',
+		'./extension/Function',
+		'./extension/Array',
+		'./extension/String',
+	],
+	function()
 	{
-		var validIdentifier=/^(?:[\$a-zA-Z_]\w*[.])*[\$a-zA-Z_]\w*$/;
-		function inOrderDescend(t,initialContext)
+		var $JSKK=
 		{
-			var i,N;
-			if (Object.isString(t))
+			version:		'1.1.0',
+			emptyFunction:	function(){},
+			global:			window || global || null,
+			/**
+			 * Use this function to create a namespace.
+			 * 
+			 * This function will safely create a namespace and return it for use.
+			 * Use this function before adding anything to a namespaced object to assure
+			 * it exists and you won't suffer data loss.
+			 * 
+			 * @member $JSKK
+			 * @param {String} namespace A string representation of the namespace to be created.
+			 * @return {Object} namespace
+			 */
+			namespace:(function()
 			{
-				var context,parts;
-				if (!validIdentifier.test(t))
+				var validIdentifier=/^(?:[\$a-zA-Z_]\w*[.])*[\$a-zA-Z_]\w*$/;
+				function inOrderDescend(t,initialContext)
 				{
-					throw new Error('"'+t+'" is not a valid name for a package.');
-				}
-				context	=initialContext;
-				parts	=t.split('.');
-				for (var i=0,N=parts.length;i<N;i++)
-				{
-					t			=parts[i];
-					context[t]	=context[t] || {};
-					context		=context[t];
-				}
-				return context;
-			}
-			else
-			{
-				console.trace();
-				throw new TypeError();
-			}
-		}
-		return function(spec,context)
-		{
-			return inOrderDescend(spec, context||$JSKK.global);	
-		};
-	})(),
-	/**
-	 * Imports packagesinto a localized scope.
-	 * 
-	 * This function simulates packages by allowing you to import a packages
-	 * into a localized scope. This can also be thought of as importing
-	 * a set of namespaces which can then be aliased (maintaining reference)
-	 * in the localized scope.
-	 * 
-	 * @member $JSKK
-	 * @param {Mixed} arguments Accepts unlimited arguments to be imported.
-	 * @return {Function} Function which accepts another function to act as the locaized scope.
-	 */
-	usingPackage: function()
-	{
-		var args=arguments;
-		return function(inner){return inner.apply(args[0],args);};
-	},
-	toArray: function(iterable)
-	{
-		if (!iterable)return [];
-		if (!(typeof iterable=='function' && iterable=='[object NodeList]') && iterable.toArray)return iterable.toArray();
-		var	length=iterable.length || 0,
-			results=new Array(length);
-		while (length--)results[length]=iterable[length];
-		return results;
-	},
-	strToObject: function(string)
-	{
-		var	obj		=$JSKK.global,
-			parts	=string.split('.');
-		
-		for (var i=0,j=parts.length; i<j; i++)
-		{
-			if (Object.isDefined(obj[parts[i]]))
-			{
-				obj=obj[parts[i]];
-			}
-			else
-			{
-				throw new Error('Invalid string to object. Object "'+string+'" has not been loaded.');
-			}
-		}
-		return obj;
-	},
-	require: function(requires,callback)
-	{
-		if (Object.isDefined(requires))
-		{
-			var formattedRequires=[];
-			if (!Object.isArray(requires))
-			{
-				requires=[requires];
-			}
-			for (var i=0,j=requires.length; i<j; i++)
-			{
-				if (Object.isString(requires[i]))
-				{
-					try
+					var i,N;
+					if (Object.isString(t))
 					{
-						$JSKK.strToObject(requires[i]);
-					}
-					catch (e)
-					{
-						formattedRequires.push(requires[i].replace(/\./g,'/'));
-					}
-				}
-				else
-				{
-					throw new Error('Object literal "'+requires[i]+'" used in require. Only use strings.');
-				}
-				// console.info('Requiring "'+requires[i]+'".');
-			}
-			var check=function(requires)
-			{
-				for (var i=0,j=requires.length; i<j; i++)
-				{
-					try
-					{
-						var obj=$JSKK.strToObject(requires[i]);
-						// console.debug(requires[i],obj.definition);
-						if (Object.isUndefined(obj.prototype.$reflect))
+						var context,parts;
+						if (!validIdentifier.test(t))
 						{
-							// console.debug(requires[i]+' is not ready... waiting... 2');
-							window.setTimeout(check,50);
-							return;
+							throw new Error('"'+t+'" is not a valid name for a package.');
 						}
+						context	=initialContext;
+						parts	=t.split('.');
+						for (var i=0,N=parts.length;i<N;i++)
+						{
+							t			=parts[i];
+							context[t]	=context[t] || {};
+							context		=context[t];
+						}
+						return context;
 					}
-					catch (e)
+					else
 					{
-						// console.debug(requires[i]+' is not ready... waiting... 1');
-						window.setTimeout(check,50);
-						return;
+						console.trace();
+						throw new TypeError();
 					}
 				}
-				// console.debug('all requires ready!!!');
-				callback();
-			}.bind(this,requires);
-			if (formattedRequires.length)
+				return function(spec,context)
+				{
+					return inOrderDescend(spec, context||$JSKK.global);	
+				};
+			})(),
+			/**
+			 * Imports packagesinto a localized scope.
+			 * 
+			 * This function simulates packages by allowing you to import a packages
+			 * into a localized scope. This can also be thought of as importing
+			 * a set of namespaces which can then be aliased (maintaining reference)
+			 * in the localized scope.
+			 * 
+			 * @member $JSKK
+			 * @param {Mixed} arguments Accepts unlimited arguments to be imported.
+			 * @return {Function} Function which accepts another function to act as the locaized scope.
+			 */
+			usingPackage: function()
 			{
-				requirejs(formattedRequires,check);
-			}
-			else
+				var args=arguments;
+				return function(inner){return inner.apply(args[0],args);};
+			},
+			toArray: function(iterable)
 			{
-				callback();
+				if (!iterable)return [];
+				if (!(typeof iterable=='function' && iterable=='[object NodeList]') && iterable.toArray)return iterable.toArray();
+				var	length=iterable.length || 0,
+					results=new Array(length);
+				while (length--)results[length]=iterable[length];
+				return results;
+			},
+			strToObject: function(string)
+			{
+				var	obj		=$JSKK.global,
+					parts	=string.split('.');
+				
+				for (var i=0,j=parts.length; i<j; i++)
+				{
+					if (Object.isDefined(obj[parts[i]]))
+					{
+						obj=obj[parts[i]];
+					}
+					else
+					{
+						throw new Error('Invalid string to object. Object "'+string+'" has not been loaded.');
+					}
+				}
+				return obj;
+			},
+			require: function(requires,callback)
+			{
+				if (Object.isDefined(requires))
+				{
+					var formattedRequires=[];
+					if (!Object.isArray(requires))
+					{
+						requires=[requires];
+					}
+					for (var i=0,j=requires.length; i<j; i++)
+					{
+						if (Object.isString(requires[i]))
+						{
+							try
+							{
+								$JSKK.strToObject(requires[i]);
+							}
+							catch (e)
+							{
+								formattedRequires.push(requires[i].replace(/\./g,'/'));
+							}
+						}
+						else
+						{
+							throw new Error('Object literal "'+requires[i]+'" used in require. Only use strings.');
+						}
+						// console.info('Requiring "'+requires[i]+'".');
+					}
+					var check=function(requires)
+					{
+						for (var i=0,j=requires.length; i<j; i++)
+						{
+							try
+							{
+								var obj=$JSKK.strToObject(requires[i]);
+								// console.debug(requires[i],obj.definition);
+								if (Object.isUndefined(obj.prototype.$reflect))
+								{
+									// console.debug(requires[i]+' is not ready... waiting... 2');
+									window.setTimeout(check,50);
+									return;
+								}
+							}
+							catch (e)
+							{
+								// console.debug(requires[i]+' is not ready... waiting... 1');
+								window.setTimeout(check,50);
+								return;
+							}
+						}
+						// console.debug('all requires ready!!!');
+						callback();
+					}.bind(this,requires);
+					if (formattedRequires.length)
+					{
+						requirejs(formattedRequires,check);
+					}
+					else
+					{
+						callback();
+					}
+				}
 			}
 		}
+		if (Object.isDefined(window))
+		{
+			$JSKK.global.$JSKK=$JSKK;
+		}
+		else
+		{
+			exports.$JSKK=$JSKK;
+		}
+		if (Object.isUndefined($JSKK.global.console))
+		{
+			$JSKK.global.console=
+			{
+				log:	$JSKK.emptyFunction,
+				debug:	$JSKK.emptyFunction,
+				warn:	$JSKK.emptyFunction,
+				info:	$JSKK.emptyFunction,
+				trace:	$JSKK.emptyFunction
+			}
+		}
+		else
+		{
+			if (Object.isUndefined($JSKK.global.console.debug))
+			{
+				$JSKK.global.console.debug=$JSKK.global.console.log;
+			}
+		}
+		
+		return $JSKK;
 	}
-}
-if (Object.isDefined(window))
-{
-	$JSKK.global.$JSKK=$JSKK;
-}
-else
-{
-	exports.$JSKK=$JSKK;
-}
-if (Object.isUndefined($JSKK.global.console))
-{
-	$JSKK.global.console=
-	{
-		log:	$JSKK.emptyFunction,
-		debug:	$JSKK.emptyFunction,
-		warn:	$JSKK.emptyFunction,
-		info:	$JSKK.emptyFunction,
-		trace:	$JSKK.emptyFunction
-	}
-}
-else
-{
-	if (Object.isUndefined($JSKK.global.console.debug))
-	{
-		$JSKK.global.console.debug=$JSKK.global.console.log;
-	}
-}
+);
