@@ -13,19 +13,6 @@ module.exports = function(grunt)
 	(
 		{
 			pkg:	grunt.file.readJSON('package.json'),
-			copy:
-			{
-				main:
-				{
-					files:
-					[
-						{
-							src:	'dist/<%= pkg.name %>-<%= pkg.version %>.js',
-							dest:	'dist/<%= pkg.name %>-<%= pkg.version_major %>.<%= pkg.version_minor %>-latest.js'
-						}
-					]
-				}
-			},
 			uglify:
 			{
 				dist:
@@ -54,9 +41,9 @@ module.exports = function(grunt)
 						baseUrl:		"src/",
 						name:			"JSKK",
 						optimize:		"none",
-						out:			"bin/<%= pkg.name %>.<%= pkg.version %>.js",
 						shim:			grunt.file.readJSON('Shim.json'),
-						wrapShim:		true
+						wrapShim:		true,
+						out:			"bin/<%= pkg.name %>.<%= pkg.version %>.js"
 					}
 				}
 			}
