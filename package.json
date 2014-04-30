@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git@github.com:melechi/JS-Klass-Kit.git"
   },
-  "main": "./src/Class",
+  "main": "./src/Core",
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-contrib-jshint": "~0.2.0",

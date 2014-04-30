@@ -2,7 +2,7 @@ module.exports = function(grunt)
 {
 	var BANNER=	"/*\r\n"
 				+' JSKK v<%= pkg.version %>'
-				+' | (c) 2011, 2013 Timothy Chandler <tim@geomash.com>'
+				+' | (c) 2014 Timothy Chandler <tim@geomash.com>'
 				+' | http://github.com/melechi/JS-Klass-Kit/blob/master/LICENSE '
 				+"\r\n"
 				+' Date Built: <%= grunt.template.today("yyyy-mm-dd") %>'
