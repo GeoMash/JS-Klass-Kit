@@ -45,6 +45,10 @@ define
 						' are abstract classes which cannot be directly initiated.'
 					].join('');
 				}
+				namespace[traitName].toString=function()
+				{
+					return '[JSKK Trait ('+definition.$namespace+'.'+definition.$name+')]';
+				}
 				//Set the class type.
 				definition.$type='trait';
 				
@@ -103,7 +107,7 @@ define
 							namespace[traitName].prototype[item]=traitBody[item];
 						}
 					}
-				}
+				};
 			},
 			normalize: function(traits,preserveInit)
 			{
