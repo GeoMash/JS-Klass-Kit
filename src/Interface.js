@@ -58,7 +58,7 @@ define
 						' are abstract classes which cannot be directly initiated.'
 					].join('');
 				}
-				namespace[traitName].toString=function()
+				namespace[interfaceName].toString=function()
 				{
 					return '[JSKK Interface ('+definition.$namespace+'.'+definition.$name+')]';
 				}
