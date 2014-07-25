@@ -60,6 +60,7 @@ define
 						case 'type':		return definition.$type;
 						case 'namespace':	return definition.$namespace;
 						case 'name':		return definition.$name;
+						case 'fullname':	return this.$namespace+'.'+this.$name;
 						// case 'extends':		return definition.$extends;
 						case 'implements':	return definition.$implements;
 						case 'uses':		return definition.$uses;

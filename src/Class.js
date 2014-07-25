@@ -347,6 +347,7 @@ define
 								case 'type':		return this.$type;
 								case 'namespace':	return this.$namespace;
 								case 'name':		return this.$name;
+								case 'fullname':	return this.$namespace+'.'+this.$name;
 								case 'extends':		return this.$extends;
 								case 'implements':	return this.$implements;
 								case 'uses':		return this.$uses;
