@@ -62,8 +62,19 @@ define
 						case 'name':		return definition.$name;
 						case 'fullname':	return this.$namespace+'.'+this.$name;
 						// case 'extends':		return definition.$extends;
-						case 'implements':	return definition.$implements;
-						case 'uses':		return definition.$uses;
+						case 'implements':	return definition.$implements	|| [];
+						case 'uses':		return definition.$uses			|| [];
+						default:
+						{
+							return {
+								type:		definition.$type,
+								namespace:	definition.$namespace,
+								name:		definition.$name,
+								fullname:	this.$namespace+'.'+this.$name,
+								implements:	definition.$implements		|| [],
+								uses:		definition.$uses			|| []
+							}
+						}
 					}
 				}
 				return function(traitBody)

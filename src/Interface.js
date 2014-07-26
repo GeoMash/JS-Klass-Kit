@@ -104,6 +104,17 @@ define
 						case 'fullname':	return this.$namespace+'.'+this.$name;
 						case 'extends':		return definition.$extends;
 						case 'implements':	return definition.$implements;
+						default:
+						{
+							return {
+								type:		definition.$type,
+								namespace:	definition.$namespace,
+								name:		definition.$name,
+								fullname:	this.$namespace+'.'+this.$name,
+								extends:	definition.$extends,
+								implements:	definition.$implements
+							}
+						}
 					}
 				}
 				
