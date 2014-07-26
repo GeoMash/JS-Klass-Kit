@@ -1143,6 +1143,17 @@ define
 						case 'fullname':	return this.$namespace+'.'+this.$name;
 						case 'extends':		return definition.$extends;
 						case 'implements':	return definition.$implements;
+						default:
+						{
+							return {
+								type:		definition.$type,
+								namespace:	definition.$namespace,
+								name:		definition.$name,
+								fullname:	this.$namespace+'.'+this.$name,
+								extends:	definition.$extends,
+								implements:	definition.$implements
+							}
+						}
 					}
 				}
 				
@@ -1314,8 +1325,19 @@ define
 						case 'name':		return definition.$name;
 						case 'fullname':	return this.$namespace+'.'+this.$name;
 						// case 'extends':		return definition.$extends;
-						case 'implements':	return definition.$implements;
-						case 'uses':		return definition.$uses;
+						case 'implements':	return definition.$implements	|| [];
+						case 'uses':		return definition.$uses			|| [];
+						default:
+						{
+							return {
+								type:		definition.$type,
+								namespace:	definition.$namespace,
+								name:		definition.$name,
+								fullname:	this.$namespace+'.'+this.$name,
+								implements:	definition.$implements		|| [],
+								uses:		definition.$uses			|| []
+							}
+						}
 					}
 				}
 				return function(traitBody)
@@ -1836,21 +1858,130 @@ define
 						//Create a reflection method.
 						namespace[className].prototype.$reflect=function(what)
 						{
+							var $this=this,
+								getExtends=function()
+								{
+									var	ret		=[],
+										exts	=$this.$extends,
+											i	=null,
+											j	=null;
+									while (exts)
+									{
+										ret.push(exts);
+										exts=exts.definition.$extends;
+									}
+									return ret;
+								},
+								getUses=function()
+								{
+									var	ret		=[],
+										exts	=$this.$extends,
+											i	=null,
+											j	=null;
+									if (Object.isArray($this.$uses))
+									{
+										for (i=0,j=$this.$uses.length; i<j; i++)
+										{
+											ret.push($this.$uses[i]);
+										}
+									}
+									while (exts)
+									{
+										if (Object.isArray(exts.definition.$uses))
+										{
+											for (i=0,j=exts.definition.$uses.length; i<j; i++)
+											{
+												ret.push(exts.definition.$uses[i]);
+											}
+										}
+										exts=exts.definition.$extends;
+									}
+									return ret;
+								},
+								getImplements=function()
+								{
+									var	ret		=[],
+										exts	=$this.$extends,
+											i	=null,
+											j	=null;
+									if (Object.isArray($this.$implements))
+									{
+										for (i=0,j=$this.$implements.length; i<j; i++)
+										{
+											ret.push($this.$implements[i]);
+										}
+									}
+									while (exts)
+									{
+										if (Object.isArray(exts.definition.$implements))
+										{
+											for (i=0,j=exts.definition.$implements.length; i<j; i++)
+											{
+												ret.push(exts.definition.$implements[i]);
+											}
+										}
+										exts=exts.definition.$extends;
+									}
+									return ret;
+								},
+								getRequires=function()
+								{
+									var	ret		=[],
+										exts	=$this.$extends,
+											i	=null,
+											j	=null;
+									if (Object.isArray($this.$requires))
+									{
+										for (i=0,j=$this.$requires.length; i<j; i++)
+										{
+											ret.push($this.$requires[i]);
+										}
+									}
+									while (exts)
+									{
+										if (Object.isArray(exts.definition.$requires))
+										{
+											for (i=0,j=exts.definition.$requires.length; i<j; i++)
+											{
+												ret.push(exts.definition.$requires[i]);
+											}
+										}
+										exts=exts.definition.$extends;
+									}
+									return ret;
+								};
+							
 							switch (what)
 							{
 								case 'type':		return this.$type;
 								case 'namespace':	return this.$namespace;
 								case 'name':		return this.$name;
 								case 'fullname':	return this.$namespace+'.'+this.$name;
-								case 'extends':		return this.$extends;
-								case 'implements':	return this.$implements;
-								case 'uses':		return this.$uses;
+								case 'extends':		return getExtends();
+								case 'implements':	return getImplements();
+								case 'uses':		return getUses();
 								case 'abstract':	return this.$abstract	|| false;
 								case 'final':		return this.$final		|| false;
-								case 'requires':	return this.$requires	|| false;
+								case 'requires':	return getRequires();
 								case 'self':		return namespace[className];
+								default:
+								{
+									return {
+										type:		this.$type,
+										namespace:	this.$namespace,
+										name:		this.$name,
+										fullname:	this.$namespace+'.'+this.$name,
+										extends:	getExtends(),
+										implements:	getImplements(),
+										uses:		getUses(),
+										abstract:	this.$abstract		|| false,
+										final:		this.$final			|| false,
+										requires:	getRequires(),
+										self:		namespace[className]
+									}
+								}
 							}
-						}.bind(this)
+						}.bind(this);
 						
 						//Add the static stuff to the class.
 						if (Object.isUndefined(this.$statics))
