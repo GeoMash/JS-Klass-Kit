@@ -33,7 +33,7 @@ How to Build JSKK
 
 ### Install Grunt
 
-Strappy is built using [Grunt](http://gruntjs.com/).
+JSKK is built using [Grunt](http://gruntjs.com/).
 
 ```
 npm install -g grunt-cli
