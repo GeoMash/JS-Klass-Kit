@@ -46,6 +46,7 @@ With grunt installed, you can not only build JSKK from source.
 Simply call grunt from the command line.
 
 ```
+npm install
 grunt
 ```
 
