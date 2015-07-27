@@ -14,15 +14,21 @@
     "type": "git",
     "url": "git@github.com:melechi/JS-Klass-Kit.git"
   },
-  "license" : {
-    "type" : "GPL-3.0",
-    "url" : "https://raw.githubusercontent.com/GeoMash/JS-Klass-Kit/master/LICENSE"
+  "license": {
+    "type": "GPL-3.0",
+    "url": "https://raw.githubusercontent.com/GeoMash/JS-Klass-Kit/master/LICENSE"
   },
   "main": "./src/Core",
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-contrib-jshint": "~0.2.0",
     "grunt-contrib-uglify": "~0.2.0",
-    "grunt-contrib-requirejs": "~0.4.4"
+    "grunt-contrib-requirejs": "~0.4.4",
+    "npm": "~2.13.0"
+  },
+  "scripts": {
+    "build": "grunt",
+    "version": "npm run build && git add -A bin",
+    "postversion": "echo 'git push && git push --tags'"
   }
 }
