@@ -37,17 +37,26 @@ JSKK is built using [Grunt](http://gruntjs.com/).
 
 ```
 npm install -g grunt-cli
+npm install
 ```
 
 With grunt installed, you can not only build JSKK from source.
 
 ### Build JSKK
 
-Simply call grunt from the command line.
+Use [NPM Version](https://docs.npmjs.com/cli/version)
 
 ```
-grunt
+npm version [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease] [-m "version commit message"]
 ```
+
+This will:
+
+- build new dist and minified dist files (by that version number)
+- add them to a new commit with the given commit message
+- git tag the version
+- push the commit and tag to git
+- publish the version to bower and npm (implicitly)
 
 Roadmap
 -------
