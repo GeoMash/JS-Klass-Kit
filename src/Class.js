@@ -571,6 +571,11 @@ define
 					// );
 					var readyRequiresAndExec=function()
 					{
+						//$requires should always be set.
+						if (!Object.isDefined(definition.$requires))
+						{
+							definition.$requires=[];
+						}
 						//Extends SHOULD be ready at this stage.
 						if (Object.isDefined(definition.$extends))
 						{
@@ -599,7 +604,7 @@ define
 							}
 							definition.$requires=definition.$requires.concat(definition.$uses);
 						}
-						if (Object.isDefined(definition.$requires) && definition.$requires.length)
+						if (definition.$requires.length)
 						{
 							$JSKK.require
 							(
