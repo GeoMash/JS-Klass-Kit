@@ -52,73 +52,218 @@ define
 				//Set the class type.
 				definition.$type='trait';
 				
+				//Flag that this trait is NOT ready to be used.
+				definition.$ready=false;
+				
 				//Create a reflection method.
-				namespace[traitName].prototype.$reflect=function(what)
+				namespace[traitName].$reflect=function(what)
 				{
+					var $this=this,
+						getExtends=function()
+						{
+							var	ret		=[],
+									i	=null,
+									j	=null;
+							return ret;
+						},
+						getUses=function()
+						{
+							var	ret		=[],
+								exts	=$this.$extends,
+									i	=null,
+									j	=null;
+							if (Object.isArray($this.$uses))
+							{
+								for (i=0,j=$this.$uses.length; i<j; i++)
+								{
+									ret.push($this.$uses[i]);
+								}
+							}
+							return ret;
+						},
+						getImplements=function()
+						{
+							var	ret		=[],
+									i	=null,
+									j	=null;
+							if (Object.isArray($this.$implements))
+							{
+								for (i=0,j=$this.$implements.length; i<j; i++)
+								{
+									ret.push($this.$implements[i]);
+								}
+							}
+							return ret;
+						},
+						getRequires=function()
+						{
+							var	ret		=[],
+									i	=null,
+									j	=null;
+							if (Object.isArray($this.$requires))
+							{
+								for (i=0,j=$this.$requires.length; i<j; i++)
+								{
+									ret.push($this.$requires[i]);
+								}
+							}
+							return ret;
+						};
+					
 					switch (what)
 					{
 						case 'type':		return definition.$type;
 						case 'namespace':	return definition.$namespace;
 						case 'name':		return definition.$name;
-						case 'fullname':	return this.$namespace+'.'+this.$name;
-						// case 'extends':		return definition.$extends;
-						case 'implements':	return definition.$implements	|| [];
-						case 'uses':		return definition.$uses			|| [];
+						case 'fullname':	return definition.$namespace+'.'+definition.$name;
+						case 'implements':	return getImplements();
+						case 'uses':		return getUses();
+						case 'requires':	return getRequires();
 						default:
 						{
 							return {
 								type:		definition.$type,
 								namespace:	definition.$namespace,
 								name:		definition.$name,
-								fullname:	this.$namespace+'.'+this.$name,
-								implements:	definition.$implements		|| [],
-								uses:		definition.$uses			|| []
+								fullname:	definition.$namespace+'.'+definition.$name,
+								implements:	getImplements(),
+								uses:		getUses(),
+								requires:	getRequires()
 							}
 						}
 					}
 				}
+				
+				//For backwards compatibility.
+				namespace[traitName].prototype.$reflect=namespace[traitName].$reflect;
+				
+				
 				return function(traitBody)
 				{
-					//Normalize the traits before adding them so that the normalized 
-					//trait can be used to validate any interfaces.
-					var normalizedTrait=false;
-					if (!Object.isUndefined(definition.$uses))
-					{
-						if (!Object.isArray(definition.$uses))definition.$uses=[definition.$uses];
-						normalizedTrait=$JSKK.Trait.normalize(definition.$uses,true);
-					}
-					//Handle implementation of interfaces.
-					if (!Object.isUndefined(definition.$implements))
-					{
-						if (!Object.isArray(definition.$implements))definition.$implements=[definition.$implements];
-						for (var i=0,j=definition.$implements.length; i<j; i++)
+					var	$this=namespace[traitName],
+						readyRequiresAndBuild=function()
 						{
-							if ($JSKK.Interface.validate(definition.$implements[i]))
+							//$requires should always be set.
+							if (!Object.isDefined(definition.$requires))
 							{
-								$JSKK.Interface.add(namespace[traitName],traitBody,normalizedTrait,definition.$implements[i]);
+								definition.$requires=[];
 							}
-						}
-					}
-					//Handle adding traits.
-					if (!Object.isUndefined(definition.$uses))
-					{
-						if ($JSKK.Trait.validate(normalizedTrait))
+							if (Object.isDefined(definition.$uses))
+							{
+								if (!Object.isArray(definition.$uses))
+								{
+									definition.$uses=[definition.$uses];
+								}
+								definition.$requires=definition.$requires.concat(definition.$uses);
+							}
+							if (Object.isDefined(definition.$implements))
+							{
+								if (!Object.isArray(definition.$implements))
+								{
+									definition.$implements=[definition.$implements];
+								}
+								definition.$requires=definition.$requires.concat(definition.$implements);
+							}
+							if (definition.$requires.length)
+							{
+								$JSKK.require
+								(
+									definition.$requires,
+									function()
+									{
+										if (Object.isDefined(definition.$uses))
+										{
+											var	timeout		=null,
+												numUses		=definition.$uses.length,
+												numReady	=0,
+												waitForReady=function(waitForTrait)
+												{
+													window.setTimeout
+													(
+														function()
+														{
+															var thisTrait=$JSKK.strToObject(waitForTrait);
+															if (Object.isUndefined(thisTrait) || !thisTrait.$ready)
+															{
+																waitForReady(waitForTrait);
+															}
+															else
+															{
+																numReady++;
+																if (numReady===numUses)
+																{
+																	build();
+																}
+															}
+														},
+														100
+													);
+												};
+											for (var i=0; i<numUses; i++)
+											{
+												waitForReady(definition.$uses[i]);
+											}
+										}
+										else
+										{
+											//Flag that this trait IS ready to be used.
+											build();
+										}
+									}
+								);
+							}
+							else
+							{
+								//Flag that this trait IS ready to be used.
+								build();
+							}
+						}.bind(this),
+						build=function()
 						{
-							$JSKK.Trait.add(namespace[traitName],normalizedTrait);
-						}
-					}
+							//Normalize the traits before adding them so that the normalized 
+							//trait can be used to validate any interfaces.
+							var normalizedTrait=false;
+							if (!Object.isUndefined(definition.$uses))
+							{
+								if (!Object.isArray(definition.$uses))definition.$uses=[definition.$uses];
+								normalizedTrait=$JSKK.Trait.normalize(definition.$uses,true);
+							}
+							//Handle implementation of interfaces.
+							if (!Object.isUndefined(definition.$implements))
+							{
+								if (!Object.isArray(definition.$implements))definition.$implements=[definition.$implements];
+								for (var i=0,j=definition.$implements.length; i<j; i++)
+								{
+									if ($JSKK.Interface.validate(definition.$implements[i]))
+									{
+										$JSKK.Interface.add(namespace[traitName],traitBody,normalizedTrait,definition.$implements[i]);
+									}
+								}
+							}
+							//Handle adding traits.
+							if (!Object.isUndefined(definition.$uses))
+							{
+								if ($JSKK.Trait.validate(normalizedTrait))
+								{
+									$JSKK.Trait.add(namespace[traitName],normalizedTrait);
+								}
+							}
+							
+							for (var item in traitBody)
+							{
+								if (typeof traitBody[item]!='function')
+								{
+									throw new Error('A trait may only contain methods.');
+								}
+								else
+								{
+									namespace[traitName].prototype[item]=traitBody[item];
+								}
+							}
+							$this.$ready=true;
+						};
 					
-					for (var item in traitBody)
-					{
-						if (typeof traitBody[item]!='function')
-						{
-							throw new Error('A trait may only contain methods.');
-						}
-						else
-						{
-							namespace[traitName].prototype[item]=traitBody[item];
-						}
-					}
+					readyRequiresAndBuild();
 				};
 			},
 			normalize: function(traits,preserveInit)
@@ -232,17 +377,6 @@ define
 				{
 					if (item!='traitName')
 					{
-						if (!Object.isFunction(thisTrait.prototype[item]))
-						{
-							throw new Error
-							(
-								
-								[
-									'Attempt to add trait to class instance failed because trait contained an entity that was not a method.',
-									' Traits may only contain methods.'
-								].join('')
-							);
-						}
 						Class.prototype[item]=thisTrait.prototype[item];
 					}
 				}

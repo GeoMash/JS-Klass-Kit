@@ -26,11 +26,13 @@ define
 			create: function(definition)
 			{
 				var def={};
+				//For shorthand class creation.
 				if (typeof definition=='string')
 				{
 					var	namespace	=$JSKK.global,
 						className	=definition;
 					
+					//Support web browsers and NodeJS.
 					def.$name		=definition;
 					def.$namespace	=(window)?'window':'global';
 					definition		=def;
@@ -46,15 +48,22 @@ define
 						var className=definition.$name;
 						if (Object.isUndefined(definition.$namespace))
 						{
+							//Support web browsers and NodeJS.
 							def.$namespace	=(window)?'window':'global';
 							var namespace	=$JSKK.global;
 						}
 						else
 						{
+							/* 
+								If parts of the namespace do not exist, $JSKK.namespace
+								will ensure that no object is undefined error's are throw
+								by creating the namespace blocks as objects.
+							 */
 							var namespace=$JSKK.namespace(definition.$namespace);
 						}
 					}
 				}
+				//This is a class.
 				definition.$type='class';
 				
 				//When a new instance of the class is created, this is where it all begins.
@@ -63,13 +72,14 @@ define
 					//Private Extension Functions
 					var processExtensions=function(scope,definition)
 					{
+						//Handle child extensions.
 						var doNextExtend=function(scope,object,$parent,extension,args)
 						{
 							//THIS WILL HANDLE PARENT METHOD CALLS - eg: this.init.$parent()
 							//Save the old $parent in a temp var.
 							var tmp=scope[object].$parent;
 							//Now override this method with a new one.
-							//- This is done so that IF this method calls ITS parent method, it won't recusively call the same method.
+							//- This is done so that IF this method calls IT'S parent method, it won't recusively call the same method.
 							scope[object].$parent=(function(scope,$parent)
 							{
 								return function()
@@ -129,7 +139,7 @@ define
 										{
 											var ext			=extension.definition.$extends,
 												gotExtension=false;
-											while (1)
+											while (true)
 											{
 												if (Object.isFunction(ext.prototype[object])
 												&& scope[object]!==ext.prototype[object])
@@ -240,6 +250,9 @@ define
 				};
 				return function(classStatics,classBody)
 				{
+					/* Main execution function.
+					This is executed once all dependencies are loaded.
+					 */
 					var exec=function(namespace,classStatics,classBody)
 					{
 						//Do the extending first, because the new class body and traits will overwrite existing methods and properties.
@@ -290,13 +303,17 @@ define
 						}
 						//Normalize the traits before adding them so that the normalized
 						//trait can be used to validate any interfaces.
-						var normalizedTrait=false;
+						var normalizedTrait=null;
 						if (!Object.isArray(namespace[className].prototype.__behaviors))
 						{
 							namespace[className].prototype.__behaviors=[];
 						}
 						if (!Object.isUndefined(this.$uses))
 						{
+							if (!Object.isArray(this.$uses))
+							{
+								this.$uses=[this.$uses];
+							}
 							normalizedTrait=$JSKK.Trait.normalize(this.$uses);
 							for (var i=0,j=this.$uses.length; i<j; i++)
 							{
@@ -305,12 +322,14 @@ define
 									namespace[className].prototype.__behaviors.push(this.$uses[i].prototype.init);
 								}
 							}
-							if (!Object.isArray(this.$uses))this.$uses=[this.$uses];
 						}
 						//Handle implementation of interfaces.
 						if (!Object.isUndefined(this.$implements))
 						{
-							if (!Object.isArray(this.$implements))this.$implements=[this.$implements];
+							if (!Object.isArray(this.$implements))
+							{
+								this.$implements=[this.$implements];
+							}
 							for (var i=0,j=this.$implements.length; i<j; i++)
 							{
 								if (Object.isDefined(this.$implements[i]))
@@ -602,14 +621,54 @@ define
 							{
 								definition.$implements=[definition.$implements];
 							}
-							definition.$requires=definition.$requires.concat(definition.$uses);
+							definition.$requires=definition.$requires.concat(definition.$implements);
 						}
 						if (definition.$requires.length)
 						{
 							$JSKK.require
 							(
 								definition.$requires,
-								exec.bind(definition,namespace,classStatics,classBody)
+								function()
+								{
+									if (Object.isDefined(definition.$uses))
+									{
+										var	numUses		=definition.$uses.length,
+											numReady	=0,
+											waitForReady=function(waitForTrait)
+											{
+												window.setTimeout
+												(
+													function()
+													{
+														var thisTrait=$JSKK.strToObject(waitForTrait);
+														if (Object.isUndefined(thisTrait) || !thisTrait.$ready)
+														{
+															waitForReady(waitForTrait);
+														}
+														else
+														{
+															numReady++;
+															if (numReady===numUses)
+															{
+																exec.bind(definition)(namespace,classStatics,classBody);
+															}
+														}
+													},
+													100
+												);
+											}
+										
+										for (var i=0; i<numUses; i++)
+										{
+											waitForReady(definition.$uses[i]);
+										}
+									}
+									else
+									{
+										exec.bind(definition)(namespace,classStatics,classBody);
+									}
+								}
+								
 							);
 						}
 						else
