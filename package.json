@@ -1,21 +1,22 @@
 {
   "name": "jskk",
-  "version": "1.3.0",
+  "version": "1.3.0d",
   "version_major": "1",
-  "version_minor": "2",
+  "version_minor": "3",
+  "version_patch": "0d",
   "description": "A Javascript Classing Engine",
   "license":"MIT",
   "author": {
     "name": "Timothy Chandler",
-    "email": "tim@s3.net.au",
+    "email": "tim@pi-co.io",
     "url": "http://github.com/melechi/JS-Klass-Kit"
   },
-  "homepage": "http://github.com/melechi/JS-Klass-Kit",
+  "homepage": "https://github.com/GeoMash/JS-Klass-Kit",
   "repository": {
     "type": "git",
-    "url": "git@github.com:melechi/JS-Klass-Kit.git"
+    "url": "git@github.com:GeoMash/JS-Klass-Kit.git"
   },
-  "main": "./src/Core",
+  "main": "./bin/jskk.1.3.0",
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-contrib-jshint": "~0.2.0",
