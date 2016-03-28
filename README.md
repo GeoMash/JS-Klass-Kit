@@ -1,6 +1,13 @@
 JS-Klass-Kit
 ============
 
+## This Repo is Deprecated
+For the latest version please see [JSKK](https://github.com/GeoMash/JS-Klass-Kit).
+
+
+------
+
+
 JSKK is a classing engine which brings object-oriented programming to the popular JavaScript language.
 JSKK allows you to create classes and extend those classes, attach interfaces, mix-in traits and a
 whole lot more. JSKK is light weight and easy to implement, has built in require.js support and
