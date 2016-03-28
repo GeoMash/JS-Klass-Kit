@@ -53,4 +53,8 @@ Roadmap
 -------
 
 
+## 1.4
+
+* Restore support for NodeJS.
+* Optimize Object.extend.
 
