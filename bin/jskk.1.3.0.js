@@ -836,7 +836,7 @@ define('extension/String', [],function(){});
  * 
  * 
  * @author Timothy Chandler tim@s3.net.au
- * @version 1.1.0
+ * @version 1.3.0
  */
 define
 (
@@ -851,7 +851,7 @@ define
 	{
 		var $JSKK=
 		{
-			version:		'1.1.0',
+			version:		'1.3.0',
 			emptyFunction:	function(){},
 			global:			window || global || null,
 			/**
@@ -998,7 +998,9 @@ define
 					}.bind(this,requires);
 					if (formattedRequires.length)
 					{
-						requirejs(formattedRequires,check);
+						//Small hack to trick webpack into not throwing a warning.
+						var __REQUIRE__='require';
+						$JSKK.global[__REQUIRE__](formattedRequires,check);
 					}
 					else
 					{
