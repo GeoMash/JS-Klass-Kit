@@ -1,8 +1,6 @@
 Classes
 -------
 
-
-
 ## Introduction
 
 `$JSKK.Class.create` is the method which you use to create a class.
@@ -39,7 +37,7 @@ When using callbacks within a JSKK class, it is necessary to bind the callback b
 
 Example:
 
-``js
+```js
 {
 	foo: function()
 	{
@@ -50,14 +48,14 @@ Example:
 		console.log(this);//"this" will be the correct scope.
 	}
 }
-``
+```
 
 ## Simple Class Creation
 
 This method of class creation accepts a simple string which follows the same rules and conventions as standard variables.
 Note that this means it does not support namespaces.
 
-``js
+```js
 $JSKK.Class.create('Application')
 (
 	{},
@@ -68,14 +66,14 @@ $JSKK.Class.create('Application')
 		}
 	}
 );
-``
+```
 
 This will create the class "Application" with no static properties or methods and an instnace method named "myFunc". It can be used like this:
 
-``js
+```js
 var app=new Application();
 app.myFunc();
-``
+```
 
 ## Advanced Class Creation
 
@@ -84,7 +82,7 @@ This method of class creation accepts an object with label or key value pairs.
 Here is the same class as above, using the advanced method.
 
 
-``js
+```js
 $JSKK.Class.create
 (
 	{
@@ -103,7 +101,7 @@ $JSKK.Class.create
 
 var app=new Main();
 app.myFunc();
-``
+```
 As you can see, it is used in the exact same way as the basic example above. However the definition block looks more verbose. That's okay though, because we get a lot more power and control over the class like this.
 
 There are more labels than `$name`. But `$name` is the one that is always required. Without it, your class cannot be accessed and cannot function.
@@ -122,7 +120,7 @@ Namespaces are used to organise objects into logical containers.
 
 JSKK manages namespaces for you automagically. By specifying a namespace, JSKK will create the namespace and place the class in that namespace.
 
-``js
+```js
 $JSKK.Class.create
 (
 	{
@@ -142,7 +140,7 @@ $JSKK.Class.create
 
 var app=new acme.app.demo.Main();
 app.myFunc();
-``
+```
 
 
 #### $extends
@@ -151,7 +149,7 @@ Inheritance is fundemental to object oriented programming. It allows you to buil
 
 JSKK supports class inheritance by use of the `$extends` label.
 
-``js
+```js
 $JSKK.Class.create
 (
 	{
@@ -246,7 +244,7 @@ user.getData
 		console.log(data);
 	}
 );
-``
+```
 
 The above is a big example. And there is a lot going on. If you are new to JSKK, some of the things there may seem a little forign to you. You can learn about them in the JSKK Extensions section.
 
@@ -259,13 +257,13 @@ This is very important as it enables the class auto loading to properly map and 
 The constructor is represented as the `init` method, and it is automatically executed when the class is initalized.
 
 
-``js
+```js
 init: function(id)
 {
 	this.id=id;
 	this.init.$parent('http://api.acme.org/');
 }
-``
+```
 
 The init method is overriden, however it's not gone. You can still call the parent class's init method via `$parent`.
 
@@ -279,7 +277,7 @@ It becomes a first-class member of `User`, so no need to access it via `$parent`
 
 JSKK supports the use of interfaces. Interfaces are a way to apply a type of blueprint to your class. Any class which implements the interface, must respect that "blueprint" and implement everything it asks to be implemented.
 
-``js
+```js
 $JSKK.Class.create
 (
 	{
@@ -308,7 +306,7 @@ $JSKK.Class.create
 		}
 	}
 );
-``
+```
 
 Continuing with the same example. Here we implement an interface called "data".
 
@@ -325,7 +323,7 @@ Traits are a form of multiple inheritance and a great way to reuse code.
 
 JSKK enables you to attach a trait to any class by way of the `$uses` label.
 
-``js
+```js
 $JSKK.Class.create
 (
 	{
@@ -355,7 +353,7 @@ $JSKK.Class.create
 		}
 	}
 );
-``
+```
 
 Like `$implements`, `$uses` also accepts an array of traits.
 
@@ -366,7 +364,7 @@ Check the documentation on using Traits to see how they are created and how to r
 
 The `$requires` label is a way to list other JSKK classes and have them loaded and made available before your class is executed.
 
-``js
+```js
 $JSKK.Class.create
 (
 	{
@@ -397,7 +395,7 @@ $JSKK.Class.create
 		}
 	}
 );
-``
+```
 
 **Important Note:**
 
@@ -410,7 +408,7 @@ The `$abstract` keyword declares the class as an abstract class. As an abstract 
 
 The class must be first extended by another class. Then the extending class may be initalized.
 
-``js
+```js
 $JSKK.Class.create
 (
 	{
@@ -435,7 +433,7 @@ $JSKK.Class.create
 		bar: $JSKK.Class.ABSTRACT_METHOD
 	}
 );
-``
+```
 
 As you can see, you can also specify methods as being abstract.
 This means that the class extending this class must implement those methods or declare itself abstract.
@@ -447,7 +445,7 @@ The `$final` label declares the class to be final, which means no further extens
 
 Note that this is not compatible with the `$abstract` label as this would prevent it from even being initalized.
 
-``js
+```js
 $JSKK.Class.create
 (
 	{
@@ -471,7 +469,7 @@ $JSKK.Class.create
 		//...
 	}
 );
-``
+```
 
 
 ## Meta Data
@@ -480,7 +478,7 @@ JSKK enables you to associate any arbitrary information with the class through k
 
 These meta data items should not be represented as labels and should not begin with `$`.
 
-``js
+```js
 $JSKK.Class.create
 (
 	{
@@ -508,7 +506,7 @@ $JSKK.Class.create
 		//...
 	}
 );
-``
+```
 
 ## Static Stuff
 
@@ -520,7 +518,7 @@ These are accessed through the class BEFORE it's initalized.
 
 Example: 
 
-``js
+```js
 $JSKK.Class.create
 (
 	{
@@ -541,7 +539,7 @@ $JSKK.Class.create
 		//...
 	}
 );
-``
+```
 
 console.log(acme.app.demo.myFunc());
 console.log(acme.app.demo.API_URL);
@@ -608,7 +606,7 @@ This will return the static representation of the class.
 
 Say we have defined the class `acme.app.demo.Main`.
 
-``js
+```js
 $JSKK.Class.create
 (
 	{
@@ -624,14 +622,14 @@ $JSKK.Class.create
 		//...
 	}
 );
-``
+```
 
 
 Let's assume you wanted to access one of it's constants from within the class. You could do that 1 of 2 ways.
 
 The first:
 
-``js
+```js
 (
 	{
 		VERSION:	'1.0.0'
@@ -643,11 +641,11 @@ The first:
 		}
 	}
 );
-``
+```
 
 The Second (with reflection):
 
-``js
+```js
 (
 	{
 		VERSION:	'1.0.0'
@@ -659,4 +657,4 @@ The Second (with reflection):
 		}
 	}
 );
-``
+```

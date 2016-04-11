@@ -5,9 +5,9 @@ Getting Started
 
 JSKK depends on RequireJS. So install that along with JSKK.
 
-``sh
+```sh
 $ npm install --save jskk requirejs
-``
+```
 
 
 #### 2. RequireJS Configuration
@@ -17,7 +17,7 @@ Create a file `src/main.js`. This will be the entry point of your application. T
 
 **main.js**
 
-``javascript
+```js
 requirejs.config
 (
 	{
@@ -28,6 +28,7 @@ requirejs.config
 		}
 	}
 );
+```
 
 #### 3. Create a Class.
 
@@ -35,7 +36,7 @@ Add the following to the `scr/main.js`, just after the `require.config()`.
 
 **main.js**
 
-``
+```js
 require
 (
 	['JSKK'],
@@ -57,7 +58,7 @@ require
 		document.getElementsByTagName('h2')[0].innerHTML='App Version v'+Application.VERSION;
 	}
 );
-``
+```
 
 #### 4. HTML Example
 
@@ -65,7 +66,7 @@ Because we're using RequireJS, we only need to specify 1 script tag, which loads
 
 **index.html**
 
-``html
+```html
 <!DOCTYPE html>
 <html>
 	<head>
@@ -77,7 +78,7 @@ Because we're using RequireJS, we only need to specify 1 script tag, which loads
 		<script data-main="src/main" src="node_modules/requirejs/require.js" async></script>
 	</body>
 </html>
-``
+```
 
 ### 5. Run it!
 
