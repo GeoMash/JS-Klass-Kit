@@ -153,7 +153,6 @@ define
 					}
 				}
 			},
-			PROPERTY:	function(){},
 			METHOD: 	function(){},
 			validate: function(thisInterface)
 			{
