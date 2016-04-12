@@ -69,7 +69,7 @@ define
 				};
 			})(),
 			/**
-			 * Imports packagesinto a localized scope.
+			 * Imports packages into a localized scope.
 			 * 
 			 * This function simulates packages by allowing you to import a packages
 			 * into a localized scope. This can also be thought of as importing
@@ -88,9 +88,13 @@ define
 			toArray: function(iterable)
 			{
 				if (!iterable)return [];
-				if (!(typeof iterable=='function' && iterable=='[object NodeList]') && iterable.toArray)return iterable.toArray();
-				var	length=iterable.length || 0,
-					results=new Array(length);
+				if (!(typeof iterable=='function'&& iterable=='[object NodeList]')
+				&& iterable.toArray)
+				{
+					return iterable.toArray();
+				}
+				var	length	=iterable.length || 0,
+					results	=new Array(length);
 				while (length--)results[length]=iterable[length];
 				return results;
 			},
@@ -197,14 +201,10 @@ define
 				trace:	$JSKK.emptyFunction
 			}
 		}
-		else
+		else if (Object.isUndefined($JSKK.global.console.debug))
 		{
-			if (Object.isUndefined($JSKK.global.console.debug))
-			{
-				$JSKK.global.console.debug=$JSKK.global.console.log;
-			}
+			$JSKK.global.console.debug=$JSKK.global.console.log;
 		}
-		
 		return $JSKK;
 	}
 );
