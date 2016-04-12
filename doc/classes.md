@@ -102,6 +102,8 @@ $JSKK.Class.create
 var app=new Main();
 app.myFunc();
 ```
+
+
 As you can see, it is used in the exact same way as the basic example above. However the definition block looks more verbose. That's okay though, because we get a lot more power and control over the class like this.
 
 There are more labels than `$name`. But `$name` is the one that is always required. Without it, your class cannot be accessed and cannot function.
@@ -275,7 +277,7 @@ It becomes a first-class member of `User`, so no need to access it via `$parent`
 
 #### $implements
 
-JSKK supports the use of interfaces. Interfaces are a way to apply a type of blueprint to your class. Any class which implements the interface, must respect that "blueprint" and implement everything it asks to be implemented.
+JSKK supports the use of interfaces. Interfaces are a way to apply a type of blueprint to your class. Any class which implements the interface, must respect that "blueprint" and implement all the methods it defines.
 
 ```js
 $JSKK.Class.create
