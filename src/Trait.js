@@ -269,13 +269,21 @@ define
 			normalize: function(traits,preserveInit)
 			{
 				//If traits is not an array, make it one so its easier to deal with.
-				if (!Object.isArray(traits))traits=[traits];
+				if (!Object.isArray(traits))
+				{
+					traits=[traits];
+				}
 				//Pluck out the conflict resolution object if present.
 				var conflictResolutions={};
 				if (!Object.isFunction(traits[traits.length-1])
-				&& !Object.isString(traits[traits.length-1]))
+				&& !Object.isString(traits[traits.length-1])
+				&& Object.isAssocArray())
 				{
 					conflictResolutions=traits[traits.length-1];
+					for (var method in conflictResolutions)
+					{
+						conflictResolutions[method]=$JSKK.strToObject(conflictResolutions[method]);
+					}
 					delete traits[traits.length-1];
 				}
 				//Now loop through each trait and see if there are any conflicts.
@@ -302,9 +310,15 @@ define
 						for (var method in traits[i].prototype)
 						{
 							//We only want to deal with methods.
-							if (!Object.isFunction(traits[i].prototype[method]))	continue;
+							if (!Object.isFunction(traits[i].prototype[method]))
+							{
+								continue;
+							}
 							//Skip init if present and preserveInit=false.
-							if (method=='init' && !preserveInit)					continue;
+							if (method=='init' && !preserveInit)
+							{
+								continue;
+							}
 							//If the method is not in the metods array, all is well.
 							if (!methods.inArray(method))
 							{
@@ -337,6 +351,7 @@ define
 						}
 					}
 				}
+				console.log('Finished normalizing traits!');
 				return normalizedTrait;
 			},
 			validate: function(thisTrait)

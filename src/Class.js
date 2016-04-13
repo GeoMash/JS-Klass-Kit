@@ -613,7 +613,23 @@ define
 							{
 								definition.$uses=[definition.$uses];
 							}
-							definition.$requires=definition.$requires.concat(definition.$uses);
+							if (!Object.isAssocArray(definition.$uses[definition.$uses.length-1]))
+							{
+								definition.$requires=definition.$requires.concat(definition.$uses);
+							}
+							else
+							{
+								/*
+									We need to iterate over this rather than use concat,
+									otherwise we could mix in the trait conflict resolution
+									object into the require block which will throw an error later
+									in the execution chain.
+								 */
+								for (var i=0,j=definition.$uses.length-1; i<j; i++)
+								{
+									definition.$requires.push(definition.$uses[i]);
+								}
+							}
 						}
 						if (Object.isDefined(definition.$implements))
 						{
@@ -632,8 +648,17 @@ define
 								{
 									if (Object.isDefined(definition.$uses))
 									{
-										var	numUses		=definition.$uses.length,
-											numReady	=0,
+										/*
+											There can be a conflict resolution block as the last
+											item in the list of $uses. So we test for this and
+											change the number accordingly.
+										 */
+										var	numUses=definition.$uses.length;
+										if (Object.isAssocArray(definition.$uses[definition.$uses.length-1]))
+										{
+											numUses--;
+										}
+										var	numReady	=0,
 											waitForReady=function(waitForTrait)
 											{
 												window.setTimeout
