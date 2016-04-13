@@ -14,13 +14,16 @@ $JSKK.Trait.create
 	}
 );
 
+
+
 $JSKK.Class.create
 (
 	{
 		$namespace:	'application',
 		$name:		'Main',
-		$uses:		[
-			behaviour.Writable
+		$uses:
+		[
+			'behaviour.Writable'
 		]
 	}
 )
@@ -41,5 +44,5 @@ $JSKK.Class.create
 
 
 
-$application=new application.Main();
-$application.sayHello();
+var app=new application.Main();
+app.sayHello();
