@@ -35,5 +35,5 @@ Example:
 ```js
 var container=$JSKK.namespace('acme.app.demo');
 console.log(container);
-``
+```
 
