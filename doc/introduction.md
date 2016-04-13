@@ -23,7 +23,6 @@ Documentation
 -------------
 
 - [Getting Started](getting-started.md)
-- [Introduction](introduction.md)
 - [Classes](classes.md)
 - [Namespaces](namespaces.md)
 - [Inheritance](inheritance.md)
