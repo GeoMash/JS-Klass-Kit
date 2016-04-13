@@ -13,7 +13,7 @@ require
 	['JSKK'],
 	function()
 	{
-		$JSKK.Class.create('foo.Application')
+		$JSKK.Class.create('Main')
 		(
 			{
 				VERSION: '1.0.0'
@@ -25,7 +25,7 @@ require
 				}
 			}
 		);
-		// var app=new Application();
-		// document.getElementsByTagName('h2')[0].innerHTML='App Version v'+Application.VERSION;
+		var app=new Main();
+		document.getElementsByTagName('h2')[0].innerHTML='App Version v'+Application.VERSION;
 	}
 );
