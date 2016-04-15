@@ -4,7 +4,7 @@ $JSKK.Class.create
 	{
 		$namespace:	'application',
 		$name:		'Main',
-		$extends:	Base,
+		$extends:	'Base',
 		$final:		true
 	}
 )
