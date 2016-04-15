@@ -351,7 +351,6 @@ define
 						}
 					}
 				}
-				console.log('Finished normalizing traits!');
 				return normalizedTrait;
 			},
 			validate: function(thisTrait)
