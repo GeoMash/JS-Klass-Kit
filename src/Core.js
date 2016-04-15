@@ -4,8 +4,8 @@
  * 
  * 
  * 
- * @author Timothy Chandler tim@s3.net.au
- * @version 1.3.0
+ * @author Timothy Chandler tim@pi-co.io
+ * @version 1.3.1
  */
 define
 (
@@ -20,7 +20,7 @@ define
 	{
 		var $JSKK=
 		{
-			version:		'1.3.0',
+			version:		'1.3.1',
 			emptyFunction:	function(){},
 			global:			window || global || null,
 			/**
