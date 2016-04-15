@@ -26,6 +26,6 @@ require
 			}
 		);
 		var app=new Main();
-		document.getElementsByTagName('h2')[0].innerHTML='App Version v'+Application.VERSION;
+		document.getElementsByTagName('h2')[0].innerHTML='App Version v'+Main.VERSION;
 	}
 );
