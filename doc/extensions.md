@@ -12,3 +12,11 @@ In practice, if you're using JSKK, it should be considered the primary library a
 
 ## Object
 
+JSKK doesn't extend the object prototype. However it does provide a large set of static functions which are attached to the Object literal.
+
+### Extend
+
+```js
+Object.extend(obj1,obj2);
+```
+
