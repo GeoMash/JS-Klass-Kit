@@ -4,7 +4,7 @@ requirejs.config
 		baseUrl:	'/node_modules',
 		paths:
 		{
-			JSKK:	'jskk/bin/jskk.1.3.0.min'
+			JSKK:	'jskk/bin/jskk.1.3.1.min'
 		}
 	}
 );
