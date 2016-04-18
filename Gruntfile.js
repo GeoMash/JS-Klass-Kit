@@ -30,6 +30,25 @@ module.exports = function(grunt)
 					]
 				}
 			},
+			copy:
+			{
+				main:
+				{
+					files:
+					[
+						{
+							src: 	'bin/<%= pkg.name %>.<%= pkg.version %>.js',
+							dest: 	'bin/<%= pkg.name %>.js',
+							filter: 'isFile'
+						},
+						{
+							src: 	'bin/<%= pkg.name %>.<%= pkg.version %>.min.js',
+							dest: 	'bin/<%= pkg.name %>.min.js',
+							filter: 'isFile'
+						}
+					]
+				}
+			},
 			requirejs:
 			{
 				main:
@@ -52,7 +71,8 @@ module.exports = function(grunt)
 
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
-	grunt.registerTask('default', ['requirejs','uglify']);
+	grunt.registerTask('default', ['requirejs','uglify','copy']);
 
 };
