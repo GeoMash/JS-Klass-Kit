@@ -836,7 +836,6 @@ define('extension/String', [],function(){});
  * 
  * 
  * @author Timothy Chandler tim@pi-co.io
- * @version 1.3.1
  */
 define
 (
@@ -851,7 +850,7 @@ define
 	{
 		var $JSKK=
 		{
-			version:		'1.3.1',
+			version:		'1.3.2',
 			emptyFunction:	function(){},
 			global:			window || global || null,
 			/**
@@ -1541,7 +1540,7 @@ define
 				var conflictResolutions={};
 				if (!Object.isFunction(traits[traits.length-1])
 				&& !Object.isString(traits[traits.length-1])
-				&& Object.isAssocArray())
+				&& Object.isAssocArray(traits[traits.length-1]))
 				{
 					conflictResolutions=traits[traits.length-1];
 					for (var method in conflictResolutions)
@@ -1615,7 +1614,6 @@ define
 						}
 					}
 				}
-				console.log('Finished normalizing traits!');
 				return normalizedTrait;
 			},
 			validate: function(thisTrait)
