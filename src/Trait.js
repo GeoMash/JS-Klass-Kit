@@ -277,7 +277,7 @@ define
 				var conflictResolutions={};
 				if (!Object.isFunction(traits[traits.length-1])
 				&& !Object.isString(traits[traits.length-1])
-				&& Object.isAssocArray())
+				&& Object.isAssocArray(traits[traits.length-1]))
 				{
 					conflictResolutions=traits[traits.length-1];
 					for (var method in conflictResolutions)
