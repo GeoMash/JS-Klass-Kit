@@ -2,24 +2,6 @@ Object.extend
 (
 	Function.prototype,
 	{
-		/**
-		 * Binds a function to a new scope and returns that function.
-		 * 
-		 * @param {Object, Function} [arguments]
-		 * @param {Mixed} arguments Parameters to bind after scope. Will map to arguments.
-		 * @return {Function} Function with new scope.
-		 */
-		bind: function()
-		{
-			if (arguments.length<2 && typeof arguments[0]=='undefined')return this;
-			var	method	=this,
-				args	=$JSKK.toArray(arguments),
-				object	=args.shift();
-			return function()
-			{
-				return method.apply(object,args.concat($JSKK.toArray(arguments)));
-			}
-		},
 		curry: function()
 		{
 			if (!arguments.length)return this;
@@ -95,4 +77,25 @@ Object.extend
 		}
 	}
 );
+if (typeof Function.prototype.bind!=='function')
+{
+	/**
+	 * Binds a function to a new scope and returns that function.
+	 * 
+	 * @param {Object, Function} [arguments]
+	 * @param {Mixed} arguments Parameters to bind after scope. Will map to arguments.
+	 * @return {Function} Function with new scope.
+	 */
+	bind: function()
+	{
+		if (arguments.length<2 && typeof arguments[0]=='undefined')return this;
+		var	method	=this,
+			args	=$JSKK.toArray(arguments),
+			object	=args.shift();
+		return function()
+		{
+			return method.apply(object,args.concat($JSKK.toArray(arguments)));
+		}
+	}
+}
 define('extension/Function', function(){});
