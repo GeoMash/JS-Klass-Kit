@@ -19,7 +19,7 @@ define
 	{
 		var $JSKK=
 		{
-			version:		'1.3.2',
+			version:		'1.4.0',
 			emptyFunction:	function(){},
 			global:			window || global || null,
 			/**
@@ -168,7 +168,8 @@ define
 						// console.debug('all requires ready!!!');
 						callback();
 					}.bind(this,requires);
-					if (formattedRequires.length)
+					//Don't do this if webpack is running as everything is already loaded!!!
+					if (formattedRequires.length && Object.isUndefined(__webpack_require__))
 					{
 						//Small hack to trick webpack into not throwing a warning.
 						var __REQUIRE__='require';
@@ -203,6 +204,14 @@ define
 		else if (Object.isUndefined($JSKK.global.console.debug))
 		{
 			$JSKK.global.console.debug=$JSKK.global.console.log;
+		}
+		//Small hack to make "requireless" environments work. Only supports webpack for now.
+		if (Object.isDefined(__webpack_require__))
+		{
+				window.require=function JSKKRequireless(modules,callback)
+				{
+						callback();
+				}
 		}
 		return $JSKK;
 	}

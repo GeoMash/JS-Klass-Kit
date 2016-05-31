@@ -835,7 +835,7 @@ define('extension/String', [],function(){});
  * 
  * 
  * 
- * @author Timothy Chandler tim@pi-co.io
+ * @author Timothy Chandler tim@zinios.com
  */
 define
 (
@@ -850,7 +850,7 @@ define
 	{
 		var $JSKK=
 		{
-			version:		'1.3.2',
+			version:		'1.4.0',
 			emptyFunction:	function(){},
 			global:			window || global || null,
 			/**
@@ -999,7 +999,8 @@ define
 						// console.debug('all requires ready!!!');
 						callback();
 					}.bind(this,requires);
-					if (formattedRequires.length)
+					//Don't do this if webpack is running as everything is already loaded!!!
+					if (formattedRequires.length && Object.isUndefined(__webpack_require__))
 					{
 						//Small hack to trick webpack into not throwing a warning.
 						var __REQUIRE__='require';
@@ -1034,6 +1035,14 @@ define
 		else if (Object.isUndefined($JSKK.global.console.debug))
 		{
 			$JSKK.global.console.debug=$JSKK.global.console.log;
+		}
+		//Small hack to make "requireless" environments work. Only supports webpack for now.
+		if (Object.isDefined(__webpack_require__))
+		{
+				window.require=function JSKKRequireless(modules,callback)
+				{
+						callback();
+				}
 		}
 		return $JSKK;
 	}
@@ -1917,12 +1926,45 @@ define
 					/* Main execution function.
 					This is executed once all dependencies are loaded.
 					 */
-					var exec=function(namespace,classStatics,classBody)
+					var	iterations=0,
+						exec=function(namespace,classStatics,classBody)
 					{
 						//Do the extending first, because the new class body and traits will overwrite existing methods and properties.
 						if (Object.isDefined(this.$extends))
 						{
-							if (Object.isUndefined(this.$extends.definition))
+							/*
+								It may take a few ms for the class to compile.
+								So create a wait loop and check that the definition
+								object exists before continuing.
+								
+								If however, it hasn't loaded after 5 iterations (1 second),
+								then continue as though it is a non-JSKK class.
+								
+								An exception to all of this is if we're running in a "requireless"
+								environment. We skip the wait and proceed with the extending.
+								
+								This is currently only supported in webpack environments.
+							 */
+							if (++iterations>5 || Object.isDefined(__webpack_require__))
+							{
+								//Clone it as to not affect the original.
+								this.$extends=Object.clone(this.$extends);
+								this.$extends.definition=
+								{
+									$type: 'class',
+									$name: this.$extends.name || '__NonJSKKClass__',
+									$statics:
+									{
+										methods: [],
+										properties: []
+									}
+								};
+								this.$extends.prototype.$reflect=function()
+								{
+									return null;
+								};
+							}
+							else if (Object.isUndefined(this.$extends.definition))
 							{
 								window.setTimeout
 								(

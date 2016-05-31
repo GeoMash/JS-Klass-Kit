@@ -253,12 +253,45 @@ define
 					/* Main execution function.
 					This is executed once all dependencies are loaded.
 					 */
-					var exec=function(namespace,classStatics,classBody)
+					var	iterations=0,
+						exec=function(namespace,classStatics,classBody)
 					{
 						//Do the extending first, because the new class body and traits will overwrite existing methods and properties.
 						if (Object.isDefined(this.$extends))
 						{
-							if (Object.isUndefined(this.$extends.definition))
+							/*
+								It may take a few ms for the class to compile.
+								So create a wait loop and check that the definition
+								object exists before continuing.
+								
+								If however, it hasn't loaded after 5 iterations (1 second),
+								then continue as though it is a non-JSKK class.
+								
+								An exception to all of this is if we're running in a "requireless"
+								environment. We skip the wait and proceed with the extending.
+								
+								This is currently only supported in webpack environments.
+							 */
+							if (++iterations>5 || Object.isDefined(__webpack_require__))
+							{
+								//Clone it as to not affect the original.
+								this.$extends=Object.clone(this.$extends);
+								this.$extends.definition=
+								{
+									$type: 'class',
+									$name: this.$extends.name || '__NonJSKKClass__',
+									$statics:
+									{
+										methods: [],
+										properties: []
+									}
+								};
+								this.$extends.prototype.$reflect=function()
+								{
+									return null;
+								};
+							}
+							else if (Object.isUndefined(this.$extends.definition))
 							{
 								window.setTimeout
 								(

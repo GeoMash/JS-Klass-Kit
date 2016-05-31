@@ -49,11 +49,20 @@ Simply call grunt from the command line.
 grunt
 ```
 
+Change Log
+----------
+
+## 1.4
+
+* Added support for extending non-JSKK classes.
+* Added support for running within "requireless" environments. (Currently only WebPack is supported)
+
+
 Roadmap
 -------
 
 
-## 1.4
+## 1.5
 
 * Restore support for NodeJS.
 * Optimize Object.extend.
