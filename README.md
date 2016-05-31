@@ -56,6 +56,8 @@ Change Log
 
 * Added support for extending non-JSKK classes.
 * Added support for running within "requireless" environments. (Currently only WebPack is supported)
+* Bind is no longer added to the Function prototype if it is already defined.
+* Restored support for NodeJS.
 
 
 Roadmap
@@ -64,6 +66,5 @@ Roadmap
 
 ## 1.5
 
-* Restore support for NodeJS.
 * Optimize Object.extend.
 

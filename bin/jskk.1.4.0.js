@@ -1,3 +1,4 @@
+if (typeof define!=='function'){var define=require('amdefine')(module);}
 /**
  * Deeply extends or merges one object into another object.
  * Note that this function will in most cases copy the properties,
