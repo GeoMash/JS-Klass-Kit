@@ -851,7 +851,7 @@ define
 	{
 		var $JSKK=
 		{
-			version:		'1.4.0',
+			version:		'1.4.1',
 			emptyFunction:	function(){},
 			global:			window || global || null,
 			/**
@@ -1143,31 +1143,6 @@ define
 					}
 				}
 				
-				//Create a reflection method.
-				namespace[interfaceName].prototype.$reflect=function(what)
-				{
-					switch (what)
-					{
-						case 'type':		return definition.$type;
-						case 'namespace':	return definition.$namespace;
-						case 'name':		return definition.$name;
-						case 'fullname':	return this.$namespace+'.'+this.$name;
-						case 'extends':		return definition.$extends;
-						case 'implements':	return definition.$implements;
-						default:
-						{
-							return {
-								type:		definition.$type,
-								namespace:	definition.$namespace,
-								name:		definition.$name,
-								fullname:	this.$namespace+'.'+this.$name,
-								extends:	definition.$extends,
-								implements:	definition.$implements
-							}
-						}
-					}
-				}
-				
 				return function(interfaceBody)
 				{
 					if (!Object.isUndefined(definition.$extends))
@@ -1328,89 +1303,6 @@ define
 				//Flag that this trait is NOT ready to be used.
 				definition.$ready=false;
 				
-				//Create a reflection method.
-				namespace[traitName].$reflect=function(what)
-				{
-					var $this=this,
-						getExtends=function()
-						{
-							var	ret		=[],
-									i	=null,
-									j	=null;
-							return ret;
-						},
-						getUses=function()
-						{
-							var	ret		=[],
-								exts	=$this.$extends,
-									i	=null,
-									j	=null;
-							if (Object.isArray($this.$uses))
-							{
-								for (i=0,j=$this.$uses.length; i<j; i++)
-								{
-									ret.push($this.$uses[i]);
-								}
-							}
-							return ret;
-						},
-						getImplements=function()
-						{
-							var	ret		=[],
-									i	=null,
-									j	=null;
-							if (Object.isArray($this.$implements))
-							{
-								for (i=0,j=$this.$implements.length; i<j; i++)
-								{
-									ret.push($this.$implements[i]);
-								}
-							}
-							return ret;
-						},
-						getRequires=function()
-						{
-							var	ret		=[],
-									i	=null,
-									j	=null;
-							if (Object.isArray($this.$requires))
-							{
-								for (i=0,j=$this.$requires.length; i<j; i++)
-								{
-									ret.push($this.$requires[i]);
-								}
-							}
-							return ret;
-						};
-					
-					switch (what)
-					{
-						case 'type':		return definition.$type;
-						case 'namespace':	return definition.$namespace;
-						case 'name':		return definition.$name;
-						case 'fullname':	return definition.$namespace+'.'+definition.$name;
-						case 'implements':	return getImplements();
-						case 'uses':		return getUses();
-						case 'requires':	return getRequires();
-						default:
-						{
-							return {
-								type:		definition.$type,
-								namespace:	definition.$namespace,
-								name:		definition.$name,
-								fullname:	definition.$namespace+'.'+definition.$name,
-								implements:	getImplements(),
-								uses:		getUses(),
-								requires:	getRequires()
-							}
-						}
-					}
-				}
-				
-				//For backwards compatibility.
-				namespace[traitName].prototype.$reflect=namespace[traitName].$reflect;
-				
-				
 				return function(traitBody)
 				{
 					var	$this=namespace[traitName],
@@ -1437,7 +1329,7 @@ define
 								}
 								definition.$requires=definition.$requires.concat(definition.$implements);
 							}
-							if (definition.$requires.length)
+							if (Object.isUndefined(__webpack_require__) && definition.$requires.length)
 							{
 								$JSKK.require
 								(
