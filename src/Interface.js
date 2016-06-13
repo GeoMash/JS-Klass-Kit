@@ -93,31 +93,6 @@ define
 					}
 				}
 				
-				//Create a reflection method.
-				namespace[interfaceName].prototype.$reflect=function(what)
-				{
-					switch (what)
-					{
-						case 'type':		return definition.$type;
-						case 'namespace':	return definition.$namespace;
-						case 'name':		return definition.$name;
-						case 'fullname':	return this.$namespace+'.'+this.$name;
-						case 'extends':		return definition.$extends;
-						case 'implements':	return definition.$implements;
-						default:
-						{
-							return {
-								type:		definition.$type,
-								namespace:	definition.$namespace,
-								name:		definition.$name,
-								fullname:	this.$namespace+'.'+this.$name,
-								extends:	definition.$extends,
-								implements:	definition.$implements
-							}
-						}
-					}
-				}
-				
 				return function(interfaceBody)
 				{
 					if (!Object.isUndefined(definition.$extends))
