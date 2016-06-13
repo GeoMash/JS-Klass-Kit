@@ -81,7 +81,7 @@ define
 								}
 								definition.$requires=definition.$requires.concat(definition.$implements);
 							}
-							if (definition.$requires.length)
+							if (Object.isUndefined(__webpack_require__) && definition.$requires.length)
 							{
 								$JSKK.require
 								(
