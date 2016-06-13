@@ -1,9 +1,9 @@
 {
   "name": "jskk",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "version_major": "1",
-  "version_minor": "3",
-  "version_patch": "2",
+  "version_minor": "4",
+  "version_patch": "1",
   "description": "A Javascript Classing Engine",
   "license":"MIT",
   "author": {
