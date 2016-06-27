@@ -19,7 +19,7 @@ define
 	{
 		var $JSKK=
 		{
-			version:		'1.4.1',
+			version:		'1.4.2',
 			emptyFunction:	function(){},
 			global:			window || global || null,
 			/**

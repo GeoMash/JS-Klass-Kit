@@ -65,7 +65,6 @@ define
 				
 				namespace[traitName].$reflect=function(){};
 				
-				
 				//Set the class type.
 				definition.$type='interface';
 				
