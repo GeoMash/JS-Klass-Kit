@@ -63,7 +63,7 @@ define
 					return '[JSKK Interface ('+definition.$namespace+'.'+definition.$name+')]';
 				}
 				
-				namespace[traitName].$reflect=function(){};
+				namespace[interfaceName].$reflect=function(){};
 				
 				//Set the class type.
 				definition.$type='interface';

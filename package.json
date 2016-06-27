@@ -1,14 +1,14 @@
 {
   "name": "jskk",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "version_major": "1",
   "version_minor": "4",
-  "version_patch": "2",
+  "version_patch": "3",
   "description": "A Javascript Classing Engine",
   "license":"MIT",
   "author": {
     "name": "Timothy Chandler",
-    "email": "tim@pi-co.io",
+    "email": "tim@zinios.com",
     "url": "http://github.com/melechi/JS-Klass-Kit"
   },
   "homepage": "https://github.com/GeoMash/JS-Klass-Kit",

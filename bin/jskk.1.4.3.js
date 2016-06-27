@@ -851,7 +851,7 @@ define
 	{
 		var $JSKK=
 		{
-			version:		'1.4.2',
+			version:		'1.4.3',
 			emptyFunction:	function(){},
 			global:			window || global || null,
 			/**
@@ -1113,7 +1113,7 @@ define
 					return '[JSKK Interface ('+definition.$namespace+'.'+definition.$name+')]';
 				}
 				
-				namespace[traitName].$reflect=function(){};
+				namespace[interfaceName].$reflect=function(){};
 				
 				//Set the class type.
 				definition.$type='interface';
