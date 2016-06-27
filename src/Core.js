@@ -169,7 +169,7 @@ define
 						callback();
 					}.bind(this,requires);
 					//Don't do this if webpack is running as everything is already loaded!!!
-					if (formattedRequires.length && Object.isUndefined(__webpack_require__))
+					if (formattedRequires.length && typeof __webpack_require__==='undefined')
 					{
 						//Small hack to trick webpack into not throwing a warning.
 						var __REQUIRE__='require';
@@ -206,11 +206,11 @@ define
 			$JSKK.global.console.debug=$JSKK.global.console.log;
 		}
 		//Small hack to make "requireless" environments work. Only supports webpack for now.
-		if (Object.isDefined(__webpack_require__))
+		if (typeof __webpack_require__!=='undefined')
 		{
 				window.require=function JSKKRequireless(modules,callback)
 				{
-						callback();
+					callback();
 				}
 		}
 		return $JSKK;

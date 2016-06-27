@@ -272,7 +272,7 @@ define
 								
 								This is currently only supported in webpack environments.
 							 */
-							if (++iterations>5 || Object.isDefined(__webpack_require__))
+							if (++iterations>5 || typeof __webpack_require__==='undefined')
 							{
 								//Clone it as to not affect the original.
 								this.$extends=Object.clone(this.$extends);

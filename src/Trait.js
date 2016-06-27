@@ -55,6 +55,8 @@ define
 				//Flag that this trait is NOT ready to be used.
 				definition.$ready=false;
 				
+				namespace[traitName].$reflect=function(){};
+				
 				return function(traitBody)
 				{
 					var	$this=namespace[traitName],
@@ -81,7 +83,7 @@ define
 								}
 								definition.$requires=definition.$requires.concat(definition.$implements);
 							}
-							if (Object.isUndefined(__webpack_require__) && definition.$requires.length)
+							if (typeof __webpack_require__==='undefined' && definition.$requires.length)
 							{
 								$JSKK.require
 								(
