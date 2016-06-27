@@ -851,7 +851,7 @@ define
 	{
 		var $JSKK=
 		{
-			version:		'1.4.1',
+			version:		'1.4.2',
 			emptyFunction:	function(){},
 			global:			window || global || null,
 			/**
@@ -1001,7 +1001,7 @@ define
 						callback();
 					}.bind(this,requires);
 					//Don't do this if webpack is running as everything is already loaded!!!
-					if (formattedRequires.length && Object.isUndefined(__webpack_require__))
+					if (formattedRequires.length && typeof __webpack_require__==='undefined')
 					{
 						//Small hack to trick webpack into not throwing a warning.
 						var __REQUIRE__='require';
@@ -1038,11 +1038,11 @@ define
 			$JSKK.global.console.debug=$JSKK.global.console.log;
 		}
 		//Small hack to make "requireless" environments work. Only supports webpack for now.
-		if (Object.isDefined(__webpack_require__))
+		if (typeof __webpack_require__!=='undefined')
 		{
 				window.require=function JSKKRequireless(modules,callback)
 				{
-						callback();
+					callback();
 				}
 		}
 		return $JSKK;
@@ -1113,6 +1113,7 @@ define
 					return '[JSKK Interface ('+definition.$namespace+'.'+definition.$name+')]';
 				}
 				
+				namespace[traitName].$reflect=function(){};
 				
 				//Set the class type.
 				definition.$type='interface';
@@ -1303,6 +1304,8 @@ define
 				//Flag that this trait is NOT ready to be used.
 				definition.$ready=false;
 				
+				namespace[traitName].$reflect=function(){};
+				
 				return function(traitBody)
 				{
 					var	$this=namespace[traitName],
@@ -1329,7 +1332,7 @@ define
 								}
 								definition.$requires=definition.$requires.concat(definition.$implements);
 							}
-							if (Object.isUndefined(__webpack_require__) && definition.$requires.length)
+							if (typeof __webpack_require__==='undefined' && definition.$requires.length)
 							{
 								$JSKK.require
 								(
@@ -1838,7 +1841,7 @@ define
 								
 								This is currently only supported in webpack environments.
 							 */
-							if (++iterations>5 || Object.isDefined(__webpack_require__))
+							if (++iterations>5 || typeof __webpack_require__==='undefined')
 							{
 								//Clone it as to not affect the original.
 								this.$extends=Object.clone(this.$extends);
